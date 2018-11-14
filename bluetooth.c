@@ -3,7 +3,9 @@
 #include <util/delay.h>
 #include<util/setbaud.h>
 #define MAXBUF 999
-
+#define FOSC 1843200 // Clock Speed
+#define BAUD 9600
+#define MYUBRR FOSC/16/BAUD-1
 
 static void USART_Transmit( unsigned char data ){
   while ( !( UCSRA & (1<<UDRE)) );
@@ -30,8 +32,8 @@ static void printf_uart(unsigned char * str){
 
 static void USART_Init(){
   /*Set baud rate */
-  UBRRH = UBRRH_VALUE; // high value
-  UBRRL = UBRRL_VALUE;  // low value
+  UBRRH = (unsigned char)(MYUBRR>>8); // high value
+  UBRRL = (unsigned char)MYUBRR; // low value
   UCSRB = (1<<RXEN) | (1<<TXEN); // as writer and reader
   UCSRC = (3<<UCSZ0); // 8 bit for caracter size
 }
