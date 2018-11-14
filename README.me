@@ -1,0 +1,16 @@
+##### Moteur :
+1.5V non asservi
+
+##### Aiguille :
+60 cadrans
+
+##### Operateurs Binaires:
+mettre un bit à 1 : PORTB = PORTB | bit;
+   => 0110 | 0001 = 0111
+mettre un bit à 0 : PORTB = PORTB & !bit;
+   => 0110 & !0010 = 0110 & 1101 = 0100
+
+pour décaler un bit : 
+(1<<6) = 100000
+ou 
+_BV(6) = 100000
