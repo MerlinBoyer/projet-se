@@ -3,7 +3,7 @@ COMPIL_OPT=-g -mmcu=atmega328p
 PORT=/dev/ttyACM0
 
 ALL=main
-DEP= main.o bluetooth.o
+DEP= main.o bluetooth.o time.o
 
 all: $(ALL)
 

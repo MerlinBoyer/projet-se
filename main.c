@@ -3,23 +3,17 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+#include "bluetooth.h"
+#include "time.h"
 
-void write_char(unsigned char c)
-{
-    while (!(UCSR0A & (1 << UDRE0)))
-        ;
-    UDR0 = c;
-    while ((UCSR0A & (1 << TXC0)) == 0x00)
-        ;
-}
-
-ISR(USART_RX_vect)
+/*ISR(USART_RX_vect)
 {
     //PORTB = PORTB | _BV(PB5);
     //int b = RXB80;
     unsigned char carac = UDR0;
     write_char(carac);
 }
+*/
 
 void init_interrupt()
 {
@@ -43,32 +37,13 @@ void SPI_MasterTransmit(char cData)
     /* Wait for transmission complete */
     while (!(SPSR & (1 << SPIF)));
 }
-
-void UART_init()
-{
-    UBRR0H = (unsigned char)0x00;
-    UBRR0L = (unsigned char)0x10; //baudrate at 115200
-
-    UCSR0A = (_BV(U2X0));
-    UCSR0B = (_BV(RXEN0)) | (_BV(TXEN0)) | (_BV(RXCIE0)); //enable RX and Tx
-    UCSR0C = (3 << (UCSZ00));                             //8bit char
-}
-
-void main()
-{
-    // Active et allume la broche PB5 (led)
-    UART_init();
-    init_interrupt();
-    int led = 0;
-    DDRB |= (1 << PB5);
-    PORTB &= ~(1 << PB5);
-
-    while (1)
-    {
-        //write_char('x');
-        _delay_ms(100);
-        PORTB = PORTB | _BV(PB5);
-        _delay_ms(100);
-        PORTB = PORTB & ~_BV(PB5);
-    }
+void main(){
+  bluetooth_Init();
+  struct Time t = {0,0,0};
+  init_time(t);
+  char t_str[999];
+  while (1){
+    get_time_str(t_str);
+    printf_bluetooth(t_str);
+  }
 }
