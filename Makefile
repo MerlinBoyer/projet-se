@@ -1,14 +1,27 @@
-CXXFLAGS=-Wall -Wextra
+F_CPU=16000000
+COMPIL_OPT=-g -mmcu=atmega328p
+PORT=/dev/ttyACM0
 
-.PHONY: all 
-all: main
+ALL=main
+DEP= main.o bluetooth.o
 
-main: 
-	avr-gcc -g -Os -mmcu=atmega328p main.c -o main.elf
-	avr-objcopy -O binary main.elf main.bin
-	avrdude -c arduino -p m328p -U main.bin -b 115200 jtagmkI -P /dev/ttyACM0 -v
+all: $(ALL)
 
-.PHONY: clean
+main: main.elf
+	avr-objcopy -j .text -j .data -O ihex main.elf main.hex	
+
+%.elf: $(DEP)
+	avr-gcc $(COMPIL_OPT) -o $@ $^
+
+%.o: %.c
+	avr-gcc $(COMPIL_OPT) -Os -c -DF_CPU=$(F_CPU) -o $@ $< 
+
 clean:
-	rm *.elf *.bin
+	rm -rf *.o
+	rm -rf *.elf
 
+install: 
+	avrdude -p atmega328p -P $(PORT) -c arduino -U flash:w:main.hex:i
+
+mrproper: clean
+	rm -rf test 
