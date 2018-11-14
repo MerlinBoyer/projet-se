@@ -6,8 +6,15 @@
 
 
 static void USART_Transmit( unsigned char data ){
-  while ( !( UCSR0A & (1<<UDRE0)) );
-  UDR0 = data;  
+  while ( !( UCSRA & (1<<UDRE)) );
+  UDR = data;  
+}
+
+static unsigned char USART_Receive( void ){
+  /* Wait for data to be received */
+  while (!(UCSRA & (1<<RXC0)));
+  /* Get and return received data from buffer */
+  return UDR0;
 }
 
 static void putchar_uart(unsigned char c){
@@ -23,20 +30,12 @@ static void printf_uart(unsigned char * str){
 
 static void USART_Init(){
   /*Set baud rate */
-  UBRR0H = UBRRH_VALUE; // high value
-  UBRR0L = UBRRL_VALUE;  // low value
-  UCSR0A = 0;
-  UCSR0B = (1<<RXEN0) | (1<<TXEN0); // as writer and reader
-  UCSR0C = (3<<UCSZ00); // 8 bit for caracter size
+  UBRRH = UBRRH_VALUE; // high value
+  UBRRL = UBRRL_VALUE;  // low value
+  UCSRB = (1<<RXEN) | (1<<TXEN); // as writer and reader
+  UCSRC = (3<<UCSZ0); // 8 bit for caracter size
 }
 
-
-static unsigned char USART_Receive( void ){
-  /* Wait for data to be received */
-  while (!(UCSR0A & (1<<RXC0)));
-  /* Get and return received data from buffer */
-  return UDR0;
-}
 
 static void scanf_uart(char * out){
   int i = 0;
