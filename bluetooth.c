@@ -3,18 +3,17 @@
 #include <util/delay.h>
 #include<util/setbaud.h>
 #define MAXBUF 999
-#define FOSC 1843200 // Clock Speed
 #define BAUD 9600
-#define MYUBRR FOSC/16/BAUD-1
+#define MYUBRR F_CPU/16/BAUD-1
 
-static void USART_Transmit( unsigned char data ){
-  while ( !( UCSRA & (1<<UDRE)) );
-  UDR = data;  
+void USART_Transmit( unsigned char data ){
+  while ( !( UCSR0A & (1<<UDRE0)) );
+  UDR0 = data;  
 }
 
 static unsigned char USART_Receive( void ){
   /* Wait for data to be received */
-  while (!(UCSRA & (1<<RXC0)));
+  while (!(UCSR0A & (1<<RXC0)));
   /* Get and return received data from buffer */
   return UDR0;
 }
@@ -30,12 +29,13 @@ static void printf_uart(unsigned char * str){
   }
 }
 
-static void USART_Init(){
+void USART_Init(){
   /*Set baud rate */
-  UBRRH = (unsigned char)(MYUBRR>>8); // high value
-  UBRRL = (unsigned char)MYUBRR; // low value
-  UCSRB = (1<<RXEN) | (1<<TXEN); // as writer and reader
-  UCSRC = (3<<UCSZ0); // 8 bit for caracter size
+  UBRR0H = UBRRH_VALUE; // high value
+  UBRR0L = UBRRL_VALUE;  // low value
+  UCSR0A = 0;
+  UCSR0B = (1<<RXEN0) | (1<<TXEN0); // as writer and reader
+  UCSR0C = (3<<UCSZ00); // 8 bit for caracter size
 }
 
 
