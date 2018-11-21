@@ -21,7 +21,7 @@ clean:
 	rm -rf *.elf
 
 install:
-	avrdude -b 115200 -p m128 -P $(PORT) -c jtagmkI -U main.bin -v
+	avrdude -b 115200 -p m128 -P $(PORT) -c jtagmkI -U main.bin -v -F
 
 mrproper: clean
 	rm -rf test
