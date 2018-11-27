@@ -20,7 +20,7 @@ clean:
 	rm -rf *.o
 	rm -rf *.elf
 
-install:
+install: main
 	avrdude -b 115200 -p m128 -P $(PORT) -c jtagmkI -U main.bin -v -F
 
 mrproper: clean
