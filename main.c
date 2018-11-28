@@ -5,22 +5,17 @@
 #include "bluetooth.h"
 #include "time.h"
 
-/*ISR(USART_RX_vect)
-{
-    //PORTB = PORTB | _BV(PB5);
-    //int b = RXB80;
-    unsigned char carac = UDR0;
-    write_char(carac);
-}
-*/
-
 
 //////       Initialisation          ////////
 
+int last_buffer_index;
+struct Time t = {0,0,0};
+char t_str[999];
 
 void init_interrupt()
 {
     sei();
+    UCSR0B |= _BV(RXCIE0);  // enable interrupt on RX (?)
 }
 
 void SPI_MasterInit(void)
@@ -39,22 +34,40 @@ void SPI_MasterTransmit(char cData)
     while (!(SPSR & (1 << SPIF)));
 }
 
+void global_init()
+{
+  init_interrupt();
+  bluetooth_init();
+  init_time(t);
+  last_buffer_index = current_index_buff;
+}
+
+/////
+
+void check_data_from_ble()
+{
+    while( last_buffer_index != current_index_buff){
+        last_buffer_index++;
+        if( last_buffer_index == MAXBUFF){
+            last_buffer_index = 0;
+        }
+        ble_send_char( USART_buffer[last_buffer_index ]);
+    }
+}
 
 
 /////            Main              ////////
 
 
 void main(){
-  bluetooth_init();
-  struct Time t = {0,0,0};
-  init_time(t);
-  char t_str[999];
-
+  global_init();
   while (1){
-    // get_time_str(t_str);
+    check_data_from_ble();
+    get_time_str(t_str);
     
-    ble_send_str( "ouioui \n" );
-    _delay_ms(1000);
+    ble_send_str( t_str );
+    ble_send_str( "\n" );
+    _delay_ms(500);
   }
 
 }
