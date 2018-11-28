@@ -1,4 +1,4 @@
-F_CPU=16000000
+F_CPU=13000000
 COMPIL_OPT=-g -mmcu=atmega128
 PORT=/dev/ttyUSB0
 

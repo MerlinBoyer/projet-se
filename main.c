@@ -1,4 +1,3 @@
-#define F_CPU 16000000
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -11,12 +10,6 @@
 int last_buffer_index;
 struct Time t = {0,0,0};
 char t_str[999];
-
-void init_interrupt()
-{
-    sei();
-    UCSR0B |= _BV(RXCIE0);  // enable interrupt on RX (?)
-}
 
 void SPI_MasterInit(void)
 {
@@ -36,10 +29,10 @@ void SPI_MasterTransmit(char cData)
 
 void global_init()
 {
-  init_interrupt();
   bluetooth_init();
   init_time(t);
   last_buffer_index = current_index_buff;
+  sei();
 }
 
 /////
@@ -61,6 +54,7 @@ void check_data_from_ble()
 
 void main(){
   global_init();
+  char val;
   while (1){
     check_data_from_ble();
     get_time_str(t_str);
