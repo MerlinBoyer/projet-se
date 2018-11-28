@@ -18,13 +18,16 @@ void USART_init(unsigned int ubrr)
   UBRR0L = (unsigned char)ubrr;
   /* Enable receiver and transmitter */
   UCSR0A |= (1 << U2X);
-  UCSR0B |= (1 << RXEN0) | (1 << TXEN0);
+  UCSR0B |= (1 << RXEN0) | (1 << TXEN0) | _BV(RXCIE0);
   /* Set frame format: 8bits data */
   UCSR0C = (3 << UCSZ00);
 }
 
 /// Send  ///
 
+/*
+*  write a carac on usart
+*/
 static void USART_send_char(unsigned char c)
 {
   while (!(UCSR0A & (1 << UDRE0)))
@@ -32,6 +35,9 @@ static void USART_send_char(unsigned char c)
   UDR0 = c;
 }
 
+/*
+*  write each string carac on USART 
+*/
 static void USART_send_str(const char *str)
 {
   while (*str != 0)
@@ -42,10 +48,10 @@ static void USART_send_str(const char *str)
 }
 
 ///  Receive  ///
-char USART_get_char(){
-  return UDR0;
-}
 
+/*
+*  read str on usart (synchronous)
+*/
 static void USART_get_data(char *out)
 {
   int i = 0;
@@ -57,10 +63,14 @@ static void USART_get_data(char *out)
   } while (c);
 }
 
-// USART get char on RX
+
+/*
+*  interrupt on usart receive :
+*  write carac into buffer and increment buffer index
+*/
 ISR(USART0_RX_vect)
 {
-  ble_send_str("interBle");
+  //ble_send_str("Ble interrupt received ");
   current_index_buff++;
   if (current_index_buff >= MAXBUFF)
   {
