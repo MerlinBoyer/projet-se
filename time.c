@@ -23,7 +23,7 @@ ISR (TIMER1_OVF_vect){
 void init_time(struct Time t){
   m_time = t;
   TCCR1A = 0x00;
-  TIFR0 |= 0x04; // clr TOV1 with 1
+  TIFR |= 0x04; // clr TOV1 with 1
   TCCR1B = (1 << CS10) | (1 << CS12);  // Timer mode with 1024 prescler
   TCCR1B |= (1 << WGM12); //RAZ timer quand comparaison
   OCR1A = 12695;

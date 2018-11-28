@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -33,15 +34,19 @@ void global_init()
   init_time(t);
   last_buffer_index = current_index_buff;
   sei();
+  ble_send_str("init ok\n");
 }
 
 /////
 
 void check_data_from_ble()
 {
+   char nb[60];
+   sprintf( nb, "%d", current_index_buff);
+   ble_send_str( nb );
     while( last_buffer_index != current_index_buff){
         last_buffer_index++;
-        if( last_buffer_index == MAXBUFF){
+        if( last_buffer_index >= MAXBUFF){
             last_buffer_index = 0;
         }
         ble_send_char( USART_buffer[last_buffer_index ]);
@@ -54,13 +59,13 @@ void check_data_from_ble()
 
 void main(){
   global_init();
-  char val;
   while (1){
-    check_data_from_ble();
+    //check_data_from_ble();
+
     get_time_str(t_str);
-    
     ble_send_str( t_str );
     ble_send_str( "\n" );
+
     _delay_ms(500);
   }
 
