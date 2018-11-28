@@ -25,7 +25,7 @@ void init_time(struct Time t){
   m_time = t;
   TCNT1 = 12695;   // for 1 sec at 13 MHz	
   TCCR1A = 0x00;
-  TCCR1B = (1 << CS10) | (1 << CS12);;  // Timer mode with 1024 prescler
+  TCCR1B = (1 << CS02) | (1 << CS01) | (1 << CS00);  // Timer mode with 1024 prescler
   TIMSK = (1 << TOIE1) ;   // Enable timer1 overflow interrupt(TOIE1)
 }
 
