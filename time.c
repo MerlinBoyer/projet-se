@@ -18,14 +18,14 @@ ISR (TIMER1_OVF_vect){
   if (m_time.hours >= 24){
     m_time.hours = 0;
   }
-  TCNT1 = 12695;   // for 1 sec at 13 MHz
 }
 
 void init_time(struct Time t){
   m_time = t;
-  TCNT1 = 12695;   // for 1 sec at 13 MHz	
   TCCR1A = 0x00;
   TCCR1B = (1 << CS10) | (1 << CS12);  // Timer mode with 1024 prescler
+  TCCR1B |= (1 << WGM12); //RAZ timer quand comparaison
+  OCR1A = 12695;
   TIMSK = (1 << TOIE1) ;   // Enable timer1 overflow interrupt(TOIE1)
 }
 
