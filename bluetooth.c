@@ -3,11 +3,11 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <util/setbaud.h>
+#include <avr/interrupt.h>
 #include "bluetooth.h"
 #define MYUBRR FOSC / 8 / BAUD - 1
 
 /////   Setup Usart for Ble device com  //////
-
 
 void USART_init(unsigned int ubrr)
 {
@@ -18,13 +18,16 @@ void USART_init(unsigned int ubrr)
   UBRR0L = (unsigned char)ubrr;
   /* Enable receiver and transmitter */
   UCSR0A |= (1 << U2X);
-  UCSR0B |= (1 << RXEN0) | (1 << TXEN0);
-  /* Set frame format: 8data */
+  UCSR0B |= (1 << RXEN0) | (1 << TXEN0) | _BV(RXCIE0);
+  /* Set frame format: 8bits data */
   UCSR0C = (3 << UCSZ00);
 }
 
 /// Send  ///
 
+/*
+*  write a carac on usart
+*/
 static void USART_send_char(unsigned char c)
 {
   while (!(UCSR0A & (1 << UDRE0)))
@@ -32,6 +35,9 @@ static void USART_send_char(unsigned char c)
   UDR0 = c;
 }
 
+/*
+*  write each string carac on USART 
+*/
 static void USART_send_str(const char *str)
 {
   while (*str != 0)
@@ -43,30 +49,37 @@ static void USART_send_str(const char *str)
 
 ///  Receive  ///
 
-// static void USART_get_data(char *out)
-// {
-//   int i = 0;
-//   char c;
-//   do
-//   {
-//     c = USART_get_char();
-//     out[++i] = c;
-//   } while (c);
-// }
-
-// USART get char on RX
-ISR(USART0_RX_vect)
+/*
+*  read str on usart (synchronous)
+*/
+static void USART_get_data(char *out)
 {
-    current_index_buff++;
-    if( current_index_buff >= MAXBUFF){
-      current_index_buff = 0;
-    }
-    USART_buffer[current_index_buff] = UDR0;
+  int i = 0;
+  char c;
+  do
+  {
+    c = USART_get_char();
+    out[++i] = c;
+  } while (c);
 }
 
 
-////////    Ble functions      ////////////
+/*
+*  interrupt on usart receive :
+*  write carac into buffer and increment buffer index
+*/
+ISR(USART0_RX_vect)
+{
+  //ble_send_str("Ble interrupt received ");
+  current_index_buff++;
+  if (current_index_buff >= MAXBUFF)
+  {
+    current_index_buff = 0;
+  }
+  USART_buffer[current_index_buff] = UDR0;
+}
 
+////////    Ble functions      ////////////
 
 // void ble_get_data(char *str)
 // {
@@ -75,7 +88,7 @@ ISR(USART0_RX_vect)
 
 void bluetooth_init()
 {
-  USART_init( MYUBRR );
+  USART_init(MYUBRR);
 }
 
 void ble_send_char(unsigned char c)
