@@ -25,11 +25,7 @@ ISR (TIMER1_OVF_vect){
 void init_time(struct Time t){
   m_time = t;
   TCCR1A = 0x00;
-<<<<<<< HEAD
   TCNT1 = MAX_CNT - 12695;   // for 1 sec at 13 MHz
-=======
-  TIFR |= 0x04; // clr TOV1 with 1
->>>>>>> 82b26999b5ba2e4ee5ea41ddca91b5b911a3728e
   TCCR1B = (1 << CS10) | (1 << CS12);  // Timer mode with 1024 prescler
   TIMSK = (1 << TOIE1) ;   // Enable timer1 overflow interrupt(TOIE1)
 }
