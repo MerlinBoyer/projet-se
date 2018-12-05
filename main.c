@@ -53,14 +53,15 @@ void echo_data_from_ble()
 void main(){
   _delay_ms(500);
   global_init();
-
+  
+  send_data(0xAA, 0xAA);
   
   while (1){
     
     // echo_data_from_ble();
     //SPI_MasterTransmit(0x0F);
     //_delay_ms(3000);
-    send_data(0xAA, 0xAA);
+    //send_data(0xAA, 0xAA);
     // get_time_str(t_str);
     // ble_send_str( t_str );
     // ble_send_str( "\n" );
