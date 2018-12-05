@@ -3,7 +3,7 @@ COMPIL_OPT=-g -mmcu=atmega128
 PORT=/dev/ttyUSB0
 
 ALL=main
-DEP= main.o bluetooth.o time.o led.o
+DEP= main.o bluetooth.o time.o led.o draw.o draw_clock.o monitor.o
 
 all: $(ALL)
 
@@ -11,10 +11,10 @@ main: main.elf
 	avr-objcopy -O binary main.elf main.bin
 
 %.elf: $(DEP)
-	avr-gcc $(COMPIL_OPT) -o $@ $^
+	avr-gcc --std=c99 $(COMPIL_OPT) -o $@ $^
 
 %.o: %.c
-	avr-gcc $(COMPIL_OPT) -Os -c -DF_CPU=$(F_CPU) -o $@ $<
+	avr-gcc --std=c99 $(COMPIL_OPT) -Os -c -DF_CPU=$(F_CPU) -o $@ $<
 
 clean:
 	rm -rf *.o

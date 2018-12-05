@@ -1,0 +1,36 @@
+#include <stdbool.h>
+#include <math.h>
+
+#define NB_LED 10
+
+// size = 2*radius * 2*radius
+bool ** m_shape;
+double m_radius;
+
+void init_draw(bool ** shape, int radius){
+  m_shape = shape;
+  m_radius = radius;
+}
+
+
+bool * get_led_val(){
+  double  alpha = get_current_angle();
+  alpha -= PI/2; // led vers le bas par défaut
+  int x = m_radius * cos(alpha);
+  int y = m_radius * sin(alpha);
+  int step = m_radius / NB_LED;
+  bool * values = malloc(sizeof(bool)*NB_LED);
+  for (int i = 0; i < NB_LED; i++){
+    int x_centre = m_radius/2;
+    int y_centre = m_radius/2;
+    values[NB_LED] = m_shape[x_centre+i*step*x][y_centre+i*step*y];
+  }
+  return values;
+}
+
+void draw(){
+  bool * values = get_led_val();
+  for (int i = 0; i < NB_LED; i++){
+    // set led val
+  }
+}
