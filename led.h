@@ -7,7 +7,9 @@
 
 void SPI_MasterInit(void);
 
-void SPI_MasterTransmit(char cData);
+void SPI_MasterTransmit(uint8_t cData);
+
+void send_data(uint8_t octet1, uint8_t octet2);
 
 
 #endif
