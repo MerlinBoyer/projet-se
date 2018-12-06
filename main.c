@@ -55,10 +55,64 @@ void main(){
   _delay_ms(500);
   global_init();
 
-  //init_clock();
-  send_data(0xB3, 0xF0);
+  //init_clock(); //nothing happens after
+  //send_data(0xB3, 0xF0);
   
   while (1){
+    
+    send_data(0x00, 0x00);
+    _delay_ms(200);
+    send_data(0x00, 0x01);
+    _delay_ms(200);
+    send_data(0x00, 0x03);
+    _delay_ms(200);
+    send_data(0x00, 0x07);
+    _delay_ms(200);
+    send_data(0x00, 0x0F);
+    _delay_ms(200);
+    send_data(0x00, 0x1F);
+    _delay_ms(200);
+    send_data(0x00, 0x3F);
+    _delay_ms(200);
+    send_data(0x00, 0x7F);
+    _delay_ms(200);
+    
+
+    send_data(0x00, 0xFF);
+    _delay_ms(200);
+    send_data(0x01, 0xFE);
+    _delay_ms(200);
+    send_data(0x03, 0xFC);
+    _delay_ms(200);
+    send_data(0x07, 0xF8);
+    _delay_ms(200);
+    send_data(0x0F, 0xF0);
+    _delay_ms(200);
+    send_data(0x1F, 0xE0);
+    _delay_ms(200);
+    send_data(0x3F, 0xC0);
+    _delay_ms(200);
+    send_data(0x7F, 0x80);
+    _delay_ms(200);
+    send_data(0xFF, 0x00);
+    _delay_ms(200);
+
+    send_data(0xFE, 0x00);
+    _delay_ms(200);
+    send_data(0xFC, 0x00);
+    _delay_ms(200);
+    send_data(0xF8, 0x00);
+    _delay_ms(200);
+    send_data(0xF0, 0x00);
+    _delay_ms(200);
+    send_data(0xE0, 0x00);
+    _delay_ms(200);
+    send_data(0xC0, 0x00);
+    _delay_ms(200);
+    send_data(0x80, 0x00);
+    _delay_ms(200);
+    send_data(0x00, 0x00);
+    _delay_ms(200);
     
     // echo_data_from_ble();
     //SPI_MasterTransmit(0x0F);
