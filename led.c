@@ -14,7 +14,7 @@ void SPI_MasterInit(void)
     //PORTE |= (1 << DDE4);
    // SPSR = 0x01;
    /* Set MOSI and SCK output, all others input */
-    DDRB = (1 << DDB2) | (1 << DDB1);
+    DDRB = (1 << DDB2) | (1 << DDB1) | (1 << DDB0);
     /* Enable SPI, Master, set clock rate fck/4 */
     SPCR = (1 << SPE) | (1 << MSTR);
     // /OE
@@ -25,6 +25,7 @@ void SPI_MasterInit(void)
 
 void SPI_MasterTransmit(uint8_t cData)
 {    
+    PORTB &= ~(1 << PORTB0);
     //PORTE &= ~(1 << PORTE4);
     SPDR = cData;
     /* Wait for transmission complete */
@@ -32,6 +33,8 @@ void SPI_MasterTransmit(uint8_t cData)
     while (!(SPSR & (1 << SPIF)))
         ;
     ble_send_str("apres\n");
+
+    PORTB |= (1 << PORTB4);
     //_delay_ms(1);
     
     /* Set output desactivated */

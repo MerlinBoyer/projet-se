@@ -54,7 +54,7 @@ void main(){
   _delay_ms(500);
   global_init();
   
-  send_data(0xAA, 0xAA);
+  send_data(0x01, 0x00);
   
   while (1){
     
