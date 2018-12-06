@@ -12,7 +12,7 @@ typedef struct Figure {
   double m_radius;
 } Figure;
 
-Figure figure;
+volatile Figure figure;
 
 void init_draw(bool ** shape, int radius){  
   figure.m_shape = shape;

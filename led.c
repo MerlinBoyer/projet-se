@@ -61,7 +61,7 @@ void set_LE(int n){
     }
 }
 
-void send_data(uint8_t octet1, uint8_t octet2){
+void set_leds(uint8_t octet1, uint8_t octet2){
     /* Start transmission */
 
     // Set /OE to 1

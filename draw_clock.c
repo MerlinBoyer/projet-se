@@ -6,16 +6,16 @@
 
 #define SIZE 33
 
-bool aiguille_h[SIZE][SIZE] = {0};
-bool aiguille_m[SIZE][SIZE] = {0};
-bool aiguille_s[SIZE][SIZE] = {0};
+volatile bool aiguille_h[SIZE][SIZE] = {0};
+volatile bool aiguille_m[SIZE][SIZE] = {0};
+volatile bool aiguille_s[SIZE][SIZE] = {0};
 
 void init_aiguilles(){
   int j = SIZE / 2 + 1; // 17
   for (int i = SIZE / 2 + 1; i >= 0; i--){
     aiguille_s[i][j] = 1;
     if (i > 5) aiguille_m[i][j] = 1;
-    if (i > 10) aiguille_s[i][j] = 1;
+    if (i > 10) aiguille_h[i][j] = 1;
   }
 }
 
@@ -50,8 +50,9 @@ bool ** union_fig(bool ** fig1, bool ** fig2, int size){
   }
   for (int i = 0; i < size; i++){
     for (int j = 0; j < size; j++){
-      if (fig1[i][j] || fig2[i][j])
-	out[i][j] = 1;
+      if (fig1[i][j] || fig2[i][j]){
+        out[i][j] = 1;
+      }
     }
   }
   return out;
@@ -59,10 +60,12 @@ bool ** union_fig(bool ** fig1, bool ** fig2, int size){
 
 void init_clock(){
   init_aiguilles();
-  bool ** temp = union_fig((bool **)aiguille_h, (bool **)aiguille_m, SIZE);
-  bool ** clock = union_fig(temp, (bool **)aiguille_s, SIZE);
+  bool temp[SIZE][SIZE] = {0};
+  bool clock[SIZE][SIZE] = {0};
+  // bool ** temp = union_fig((bool **)aiguille_h, (bool **)aiguille_m, SIZE);
+  // bool ** clock = union_fig(temp, (bool **)aiguille_s, SIZE);
   for(int i = 0; i < SIZE; i++){
-    free(temp[i]);
+     free(temp[i]);
   }
   free(temp);
   init_draw(clock, SIZE/2+1);
