@@ -70,7 +70,7 @@ void send_data(uint8_t octet1, uint8_t octet2){
     // transmit data
     SPI_MasterTransmit(octet1);
     _delay_us(1);
-    //SPI_MasterTransmit(octet2);
+    SPI_MasterTransmit(octet2);
     _delay_us(1);
 
     /* Set LE to 1 then 0 (latch data on driver)*/

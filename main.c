@@ -55,8 +55,8 @@ void main(){
   _delay_ms(500);
   global_init();
 
-  init_clock();
-  send_data(0xAA, 0xAA);
+  //init_clock();
+  send_data(0xB3, 0xF0);
   
   while (1){
     
@@ -67,7 +67,7 @@ void main(){
     // get_time_str(t_str);
     // ble_send_str( t_str );
     // ble_send_str( "\n" );
-    draw();
+    //draw();
   }
 
 }
