@@ -5,7 +5,8 @@
 #include "bluetooth.h"
 #include "time.h"
 #include "led.h"
-
+#include "draw_clock.h"
+#include "draw.h"
 
 //////       Initialisation          ////////
 
@@ -53,8 +54,9 @@ void echo_data_from_ble()
 void main(){
   _delay_ms(500);
   global_init();
-  
-  send_data(0x01, 0x00);
+
+  init_clock();
+  send_data(0xAA, 0xAA);
   
   while (1){
     
@@ -65,9 +67,7 @@ void main(){
     // get_time_str(t_str);
     // ble_send_str( t_str );
     // ble_send_str( "\n" );
-
-    _delay_ms(500);
-  
+    draw();
   }
 
 }

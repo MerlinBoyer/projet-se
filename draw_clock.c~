@@ -1,0 +1,94 @@
+#include <stdbool.h>
+#include "draw.h"
+
+#define SIZE 5
+
+bool aiguille_h[][] = {
+  {0 0 0 0 0 0 0},
+  {0 0 0 0 0 0 0},
+  {0 0 0 1 0 0 0},
+  {0 0 0 1 0 0 0},
+  {0 0 0 0 0 0 0},
+  {0 0 0 0 0 0 0},
+  {0 0 0 0 0 0 0},
+};
+
+bool aiguille_m[][] = {
+  {0 0 0 0 0 0 0},
+  {0 0 0 1 0 0 0},
+  {0 0 0 1 0 0 0},
+  {0 0 0 1 0 0 0},
+  {0 0 0 0 0 0 0},
+  {0 0 0 0 0 0 0},
+  {0 0 0 0 0 0 0},
+};
+
+bool aiguille_s[][] = {
+  {0 0 0 1 0 0 0},
+  {0 0 0 1 0 0 0},
+  {0 0 0 1 0 0 0},
+  {0 0 0 1 0 0 0},
+  {0 0 0 0 0 0 0},
+  {0 0 0 0 0 0 0},
+  {0 0 0 0 0 0 0},
+}
+
+bool ** rotation(bool ** figure, int size, double angle){
+  bool ** out = malloc(sizeof(bool *)*size);
+  for (int i = 0; i < size; i++){
+    out[i] = malloc(sizeof(bool)*size);
+    for (int j = 0; j < size; j++){
+      out[i][j] = 0;
+    }
+  }
+  for (int i = 0; i < size; i++){
+    for (int j = 0; j < size; j++){      
+      if (figure[i][j]){
+	// j <=> x, i <=> -y
+	int new_x = cos(angle)*j + sin(angle) * (size-1-i);
+	int new_y = -1*sin(angle)*j + cos(angle) * (size-1-i);
+	out[new_x][new_y] = 1;
+      }
+    }
+  }
+  return out;
+}
+
+bool ** union(bool ** fig1, bool ** fig2){
+  bool ** out = malloc(sizeof(bool *)*size);
+  for (int i = 0; i < size; i++){
+    out[i] = malloc(sizeof(bool)*size);
+    for (int j = 0; j < size; j++){
+      out[i][j] = 0;
+    }
+  }
+  for (int i = 0; i < size; i++){
+    for (int j = 0; j < size; j++){
+      if (fig1[i][j] || fig2[i][j])
+	out[i][j] = 1;
+    }
+  }
+  return out;
+}
+
+void init_clock(){
+  bool ** temp = union(aiguille_h, aiguille_m);
+  bool ** clock = union(temp, aiguille_s);
+  for(int i = 0; i < SIZE; i++){
+    free(temp[i]);
+  }
+  free(temp);
+
+  TCCR2A = 0x00;
+  TCNT2 = 0;   // for 1 sec at 13 MHz
+  TCCR2B = (1 << CS??) | (1 << CS??);  // Timer mode with 1024 prescler
+  TIMSK = (1 << TOIE2) ;   // Enable timer1 overflow interrupt(TOIE2)
+
+  init_draw(clock, SIZE/2+1);
+  init_monitor();
+}
+
+
+ISR (TIMER2_OVF_vect){  
+  draw();
+}

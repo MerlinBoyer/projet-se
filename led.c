@@ -3,10 +3,9 @@
 #include <stdio.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+#include "bluetooth.h"
 
-void SPI_MasterInit(void)
-{
-    
+void SPI_MasterInit(void){    
     /* Set /OE and LE as outputs*/
     DDRE |= (1 << DDE4) | (1 << DDE5);
     /* Set /OE to 0 : set outputs activated */
@@ -23,9 +22,11 @@ void SPI_MasterInit(void)
     PORTE &= ~(1 << PORTE5);
 }
 
+
 void SPI_MasterTransmit(uint8_t cData)
 {    
     PORTB &= ~(1 << PORTB0);
+
     //PORTE &= ~(1 << PORTE4);
     SPDR = cData;
     /* Wait for transmission complete */
@@ -60,8 +61,7 @@ void set_LE(int n){
     }
 }
 
-void send_data(uint8_t octet1, uint8_t octet2)
-{
+void send_data(uint8_t octet1, uint8_t octet2){
     /* Start transmission */
 
     // Set /OE to 1
