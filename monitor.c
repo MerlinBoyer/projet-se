@@ -44,7 +44,7 @@ void init_monitor(){
   TCCR0 |= (1 << CS01) | (1 << CS00);  // Timer mode with 1024 prescler, 12.69 for 1ms
   TIMSK |= (1 << TOIE0) ;   // Enable timer1 overflow interrupt(TOIE0)
 
-  DDRE &= ~(1 << PIN1);
+  //DDRE &= ~(1 << PIN1);
   //    /* Defining a pull-up resistor to to pin 1 on bus E */
   //    /* to prevent input floating */
   PORTE |= (1 << PIN1);

@@ -30,10 +30,8 @@ void SPI_MasterTransmit(uint8_t cData)
     //PORTE &= ~(1 << PORTE4);
     SPDR = cData;
     /* Wait for transmission complete */
-    ble_send_str("avant\n");
     while (!(SPSR & (1 << SPIF)))
         ;
-    ble_send_str("apres\n");
 
     PORTB |= (1 << PORTB4);
     //_delay_ms(1);
@@ -46,10 +44,8 @@ void SPI_MasterTransmit(uint8_t cData)
 void set_OE(int n){
     if (n){
         PORTE |= (1 << PORTE4);
-        ble_send_str("OE 1\n");
     }else {
         PORTE &= ~(1 << PORTE4);
-        ble_send_str("OE 0\n");
     }
 }
 

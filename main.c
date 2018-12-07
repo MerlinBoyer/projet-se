@@ -57,6 +57,7 @@ void check_ble()
 */
 void check(){
   check_ble();
+  check_hall();
 }
 
 
@@ -68,12 +69,17 @@ void main(){
   global_init();
 
   while (1){
+    all_leds_ON();
     check();
+    ble_send_str(itoa(HALL_BOOL));
+    _delay_ms(500);
     // get_time_str(t_str);
     // ble_send_str( t_str );
     // ble_send_str( "\n" );
-    //draw();
-    draw_circles();
+    // draw();
+    // draw_circles();
+    all_leds_OFF();
+   _delay_ms(500);
   }
 }
 
