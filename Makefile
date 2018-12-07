@@ -3,7 +3,7 @@ COMPIL_OPT=-g -mmcu=atmega128
 PORT=/dev/ttyUSB0
 
 ALL=main
-DEP= main.o bluetooth.o time.o led.o draw.o draw_clock.o monitor.o
+DEP= main.o bluetooth.o time.o led.o draw.o draw_clock.o monitor.o hallSensor.o
 
 all: $(ALL)
 

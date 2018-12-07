@@ -83,3 +83,68 @@ void set_leds(uint8_t octet1, uint8_t octet2){
     set_OE(0);
 
 }
+
+
+/*-------------- Drawing patterns  --------------------*/
+
+void all_leds_ON(){
+    set_leds(0xFF,0xFF);
+}
+
+void all_leds_OFF(){
+    set_leds(0x00,0x00);
+}
+
+void draw_circles(){
+    set_leds(0x00, 0x00);
+    _delay_ms(200);
+    set_leds(0x00, 0x01);
+    _delay_ms(200);
+    set_leds(0x00, 0x03);
+    _delay_ms(200);
+    set_leds(0x00, 0x07);
+    _delay_ms(200);
+    set_leds(0x00, 0x0F);
+    _delay_ms(200);
+    set_leds(0x00, 0x1F);
+    _delay_ms(200);
+    set_leds(0x00, 0x3F);
+    _delay_ms(200);
+    set_leds(0x00, 0x7F);
+    _delay_ms(200);
+    
+
+    set_leds(0x00, 0xFF);
+    _delay_ms(200);
+    set_leds(0x01, 0xFE);
+    _delay_ms(200);
+    set_leds(0x03, 0xFC);
+    _delay_ms(200);
+    set_leds(0x07, 0xF8);
+    _delay_ms(200);
+    set_leds(0x0F, 0xF0);
+    _delay_ms(200);
+    set_leds(0x1F, 0xE0);
+    _delay_ms(200);
+    set_leds(0x3F, 0xC0);
+    _delay_ms(200);
+    set_leds(0x7F, 0x80);
+    _delay_ms(200);
+    set_leds(0xFF, 0x00);
+    _delay_ms(200);
+
+    set_leds(0xFE, 0x00);
+    _delay_ms(200);
+    set_leds(0xFC, 0x00);
+    _delay_ms(200);
+    set_leds(0xF8, 0x00);
+    _delay_ms(200);
+    set_leds(0xF0, 0x00);
+    _delay_ms(200);
+    set_leds(0xE0, 0x00);
+    _delay_ms(200);
+    set_leds(0xC0, 0x00);
+    _delay_ms(200);
+    set_leds(0x80, 0x00);
+    _delay_ms(200);
+}

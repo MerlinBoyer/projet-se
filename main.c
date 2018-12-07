@@ -7,6 +7,7 @@
 #include "led.h"
 #include "draw_clock.h"
 #include "draw.h"
+#include "hallSensor.h"
 
 //////       Initialisation          ////////
 
@@ -23,111 +24,57 @@ void global_init()
   init_time(t);         // init timers and time counting (time.c)
   SPI_MasterInit();         // init SPI comm (led.c)
   init_clock();
-  
+  init_hallsensor();
+
   sei();             // Allow interrupt
   ble_send_str("init ok\n");
 }
 
-/////
+
+
+///// checking functions  ///////
 
 /*
 *  Check if data have been saved into ble buffer
 *  then update current index and send data to ble
 */
-void echo_data_from_ble()
+void check_ble()
 {
 //    char nb[60];
 //    sprintf( nb, "%d", current_index_buff);
 //    ble_send_str( nb );
-    while( last_buffer_index != current_index_buff){
-        last_buffer_index++;
-        if( last_buffer_index >= MAXBUFF){
-            last_buffer_index = 0;
-        }
-        ble_send_char( USART_buffer[last_buffer_index ]);
-    }
+  while( last_buffer_index != current_index_buff){
+      last_buffer_index++;
+      if( last_buffer_index >= MAXBUFF){
+          last_buffer_index = 0;
+      }
+      ble_send_char( USART_buffer[last_buffer_index ]);
+  }
 }
 
-
-
-
-
-void draw_circles(){
-    set_leds(0x00, 0x00);
-    _delay_ms(200);
-    set_leds(0x00, 0x01);
-    _delay_ms(200);
-    set_leds(0x00, 0x03);
-    _delay_ms(200);
-    set_leds(0x00, 0x07);
-    _delay_ms(200);
-    set_leds(0x00, 0x0F);
-    _delay_ms(200);
-    set_leds(0x00, 0x1F);
-    _delay_ms(200);
-    set_leds(0x00, 0x3F);
-    _delay_ms(200);
-    set_leds(0x00, 0x7F);
-    _delay_ms(200);
-    
-
-    set_leds(0x00, 0xFF);
-    _delay_ms(200);
-    set_leds(0x01, 0xFE);
-    _delay_ms(200);
-    set_leds(0x03, 0xFC);
-    _delay_ms(200);
-    set_leds(0x07, 0xF8);
-    _delay_ms(200);
-    set_leds(0x0F, 0xF0);
-    _delay_ms(200);
-    set_leds(0x1F, 0xE0);
-    _delay_ms(200);
-    set_leds(0x3F, 0xC0);
-    _delay_ms(200);
-    set_leds(0x7F, 0x80);
-    _delay_ms(200);
-    set_leds(0xFF, 0x00);
-    _delay_ms(200);
-
-    set_leds(0xFE, 0x00);
-    _delay_ms(200);
-    set_leds(0xFC, 0x00);
-    _delay_ms(200);
-    set_leds(0xF8, 0x00);
-    _delay_ms(200);
-    set_leds(0xF0, 0x00);
-    _delay_ms(200);
-    set_leds(0xE0, 0x00);
-    _delay_ms(200);
-    set_leds(0xC0, 0x00);
-    _delay_ms(200);
-    set_leds(0x80, 0x00);
-    _delay_ms(200);
-    set_leds(0x00, 0x00);
-    _delay_ms(200);
+/*
+*  Run routines to updates some data
+*/
+void check(){
+  check_ble();
 }
+
 
 /////            Main              ////////
 
 
 void main(){
-  _delay_ms(500);
+  _delay_ms(1);
   global_init();
 
-  //; //nothing happens after
-  
   while (1){
-    
-    draw_circles();
-    // echo_data_from_ble();
-    //SPI_MasterTransmit(0x0F);
-    //_delay_ms(3000);
-    //send_data(0xAA, 0xAA);
+    check();
     // get_time_str(t_str);
     // ble_send_str( t_str );
     // ble_send_str( "\n" );
     //draw();
+    draw_circles();
   }
-
 }
+
+//draw_circles();
