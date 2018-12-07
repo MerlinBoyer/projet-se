@@ -51,17 +51,17 @@ static void USART_send_str(const char *str)
 
 /*
 *  read str on usart (synchronous)
-*/
-static void USART_get_data(char *out)
-{
-  int i = 0;
-  char c;
-  do
-  {
-    c = USART_get_char();
-    out[++i] = c;
-  } while (c);
-}
+// */
+// static void USART_get_data(char *out)
+// {
+//   int i = 0;
+//   char c;
+//   do
+//   {
+//     c = USART_get_char();
+//     out[++i] = c;
+//   } while (c);
+// }
 
 
 /*

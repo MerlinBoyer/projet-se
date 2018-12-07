@@ -49,29 +49,7 @@ void echo_data_from_ble()
 }
 
 
-/////            Main              ////////
 
-
-void main(){
-  _delay_ms(500);
-  global_init();
-
-  //; //nothing happens after
-  
-  while (1){
-    
-    draw_circles();
-    // echo_data_from_ble();
-    //SPI_MasterTransmit(0x0F);
-    //_delay_ms(3000);
-    //send_data(0xAA, 0xAA);
-    // get_time_str(t_str);
-    // ble_send_str( t_str );
-    // ble_send_str( "\n" );
-    //draw();
-  }
-
-}
 
 
 void draw_circles(){
@@ -128,4 +106,28 @@ void draw_circles(){
     _delay_ms(200);
     set_leds(0x00, 0x00);
     _delay_ms(200);
+}
+
+/////            Main              ////////
+
+
+void main(){
+  _delay_ms(500);
+  global_init();
+
+  //; //nothing happens after
+  
+  while (1){
+    
+    draw_circles();
+    // echo_data_from_ble();
+    //SPI_MasterTransmit(0x0F);
+    //_delay_ms(3000);
+    //send_data(0xAA, 0xAA);
+    // get_time_str(t_str);
+    // ble_send_str( t_str );
+    // ble_send_str( "\n" );
+    //draw();
+  }
+
 }
