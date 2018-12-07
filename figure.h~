@@ -1,0 +1,13 @@
+#ifndef FIGURE_H
+#define FIGURE_H
+
+typedef struct Figure {
+  unsigned char pixels[SIZE][SIZE/8+1];
+} Figure;
+
+
+bool figure_get_pixel(Figure *f, int i, int j);
+void figure_set_pixel(Figure *f, int i, int j, bool value);
+void figure_init(Figure *f);
+
+#endif

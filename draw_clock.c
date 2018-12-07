@@ -2,62 +2,53 @@
 #include <math.h>
 #include "draw.h"
 #include "monitor.h"
+#include <avr/io.h>
+#include "led.h"
+#include "figure.h"
 
-#define SIZE 33
 
-bool aiguille_h[SIZE][SIZE] = {0};
-bool aiguille_m[SIZE][SIZE] = {0};
-bool aiguille_s[SIZE][SIZE] = {0};
-
-void init_aiguilles(){
+void init_aiguilles(Figure * aiguille_h, Figure * aiguille_m, Figure * aiguille_s){
   int j = SIZE / 2 + 1;   // 17
   for (int i = SIZE / 2 + 1; i >= 0; i--){
-    aiguille_s[i][j] = 1;
-    if (i > 5) aiguille_m[i][j] = 1;
-    if (i > 10) aiguille_h[i][j] = 1;
+    figure_set_pixel(aiguille_s, i, j, true);
+    if (i > 5) figure_set_pixel(aiguille_m, i, j, true);
+    if (i > 10) figure_set_pixel(aiguille_h, i, j, true);
   }
 }
 
-void rotation(bool figure[][SIZE], int size, double angle, bool out[][SIZE]){
-  for (int i = 0; i < size; i++){
-    for (int j = 0; j < size; j++){
-      out[i][j] = 0;
-    }
-  }
+void rotation(Figure * figure, int size, double angle, Figure * out){
   for (int i = 0; i < size; i++){
     for (int j = 0; j < size; j++){      
-      if (figure[i][j]){
+      if (figure_get_pixel(figure, i, j)){
 	// j <=> x, i <=> -y
 	int new_x = cos(angle)*j + sin(angle) * (size-1-i);
 	int new_y = -1*sin(angle)*j + cos(angle) * (size-1-i);
-	out[new_x][new_y] = 1;
+	figure_set_pixel(out, new_x, new_y, true);
       }
     }
   }
 }
 
-void union_fig(bool fig1[][SIZE], bool fig2[][SIZE], int size, bool out[][SIZE]){
+void union_fig(Figure * fig1, Figure * fig2, int size, Figure * out){
   for (int i = 0; i < size; i++){
     for (int j = 0; j < size; j++){
-      out[i][j] = 0;
-    }
-  }
-  for (int i = 0; i < size; i++){
-    for (int j = 0; j < size; j++){
-      if (fig1[i][j] || fig2[i][j]){
-        out[i][j] = 1;
+      if (figure_get_pixel(fig1, i, j) || figure_get_pixel(fig2, i, j)){
+        figure_set_pixel(out, i, j, true);
       }
     }
   }
 }
 
 void init_clock(){
-  init_aiguilles();
-  bool temp[SIZE][SIZE] = {0};
-  bool clock[SIZE][SIZE] = {0};
-  union_fig(aiguille_h, aiguille_m, SIZE, temp);
-  union_fig(temp, aiguille_s, SIZE, clock);
-  init_draw((bool **)clock, SIZE/2+1);
+  Figure aiguille_h; figure_init(&aiguille_h);
+  Figure aiguille_m; figure_init(&aiguille_m);
+  Figure aiguille_s; figure_init(&aiguille_s);
+  init_aiguilles(&aiguille_h, &aiguille_m, &aiguille_s);
+  Figure temp; figure_init(&temp);
+  Figure clock; figure_init(&clock);
+  union_fig(&aiguille_h, &aiguille_m, SIZE, &temp);
+  union_fig(&temp, &aiguille_s, SIZE, &clock);
+  init_draw(&clock, SIZE/2+1);
   init_monitor();
 }
 

@@ -23,9 +23,8 @@ void global_init()
   last_buffer_index = current_index_buff;   // init buffer for ble receiving
   init_time(t);         // init timers and time counting (time.c)
   SPI_MasterInit();         // init SPI comm (led.c)
-  init_clock();
   init_hallsensor();
-
+  init_clock();
   sei();             // Allow interrupt
   ble_send_str("init ok\n");
 }
@@ -65,21 +64,10 @@ void check(){
 
 
 void main(){
-  _delay_ms(1);
   global_init();
-
+  _delay_ms(1);  
   while (1){
-    all_leds_ON();
-    check();
-    ble_send_str(itoa(HALL_BOOL));
-    _delay_ms(500);
-    // get_time_str(t_str);
-    // ble_send_str( t_str );
-    // ble_send_str( "\n" );
-    // draw();
-    // draw_circles();
-    all_leds_OFF();
-   _delay_ms(500);
+    draw();
   }
 }
 

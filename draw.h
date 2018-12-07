@@ -2,8 +2,11 @@
 #define DRAW_H
 
 #include <stdbool.h>
+#include "figure.h"
 
-void init_draw(bool ** shape, int radius);
+#define NB_LED 17
+
+void init_draw(Figure * shape, int radius);
 void draw();
 
 #endif
