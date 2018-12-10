@@ -19,11 +19,10 @@ char t_str[999];
 
 void global_init()
 {
-  bluetooth_init();         // init ble
+  // bluetooth_init();         // init ble
   last_buffer_index = current_index_buff;   // init buffer for ble receiving
   init_time(t);         // init timers and time counting (time.c)
   SPI_MasterInit();         // init SPI comm (led.c)
-  init_hallsensor();
   init_clock();
   sei();             // Allow interrupt
   ble_send_str("init ok\n");
@@ -52,7 +51,7 @@ void check_ble()
 }
 
 /*
-*  Run routines to updates some data
+*  Run rouXotines to updates some data
 */
 void check(){
   check_ble();
