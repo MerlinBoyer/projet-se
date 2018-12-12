@@ -44,10 +44,9 @@ void init_clock(){
   Figure aiguille_m; figure_init(&aiguille_m);
   Figure aiguille_s; figure_init(&aiguille_s);
   init_aiguilles(&aiguille_h, &aiguille_m, &aiguille_s);
-  Figure temp; figure_init(&temp);
   Figure clock; figure_init(&clock);
-  union_fig(&aiguille_h, &aiguille_m, SIZE, &temp);
-  union_fig(&temp, &aiguille_s, SIZE, &clock);
+  union_fig(&aiguille_h, &aiguille_m, SIZE, &clock);
+  union_fig(&clock, &aiguille_s, SIZE, &clock);
   init_draw(&clock, SIZE/2+1);
   init_monitor();
 }
