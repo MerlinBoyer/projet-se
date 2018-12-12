@@ -33,7 +33,7 @@ void SPI_MasterTransmit(uint8_t cData)
     while (!(SPSR & (1 << SPIF)))
         ;
 
-    PORTB |= (1 << PORTB4);
+    PORTB |= (1 << PORTB0);
     //_delay_ms(1);
     
     /* Set output desactivated */

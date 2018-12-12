@@ -68,3 +68,11 @@ double get_current_angle(){
   double time_passed = compute_time_passed();
   return (time_passed/one_tour_time * 2*M_PI);
 }
+
+//degres
+double get_current_angle_degree(){
+  if (nb_samples == 0) return 0;
+  double one_tour_time = 1/avg_speed;
+  double time_passed = compute_time_passed();
+  return (time_passed/one_tour_time * 360);
+}

@@ -64,9 +64,12 @@ void check(){
 
 void main(){
   global_init();
-  _delay_ms(1);  
+  _delay_ms(1); 
+  //char * out; 
   while (1){
-    draw();
+    //draw();    
+    draw_simple();
+    //ble_send_str(get_time_str(out));
   }
 }
 
