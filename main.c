@@ -19,7 +19,7 @@ char t_str[999];
 
 void global_init()
 {
-  // bluetooth_init();         // init ble
+  bluetooth_init();         // init ble
   last_buffer_index = current_index_buff;   // init buffer for ble receiving
   init_time(t);         // init timers and time counting (time.c)
   SPI_MasterInit();         // init SPI comm (led.c)
