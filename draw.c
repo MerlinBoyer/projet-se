@@ -7,37 +7,36 @@
 #include "draw.h"
 #include "figure.h"
 
-#define RETARD M_PI/15
+#define RETARD M_PI/9
 // size = 2*radius * 2*radius
 
 Figure m_shape;
-double m_radius;
-/*
-char tab_sin[36] = {0};
-char tab_cos[36] = {0};
+float m_radius;
 
+//char tab_sin[360] = {0};
+char tab_cos[360/5] = {0};
+/*
 double compute_sin(int radians){
   int degres = 180 * radians / M_PI;
   degres %= 360;
   if (degres == 0 || degres == 360)
     return 0;
-  if (!tab_sin[degres/10]){
-    tab_sin[degres/10] = sin(radians)*100;
+  if (!tab_sin[degres]){
+    tab_sin[degres] = sin(radians)*100;
   }
-  return tab_sin[degres/10]*100;
+  return tab_sin[degres]*100;
 }
-
-double compute_cos(int radians){
+*/
+float compute_cos(float radians){
   int degres = 180 * radians / M_PI;
   degres %= 360;
   if (degres == 90 || degres == 270)
     return 0;
-  if (!tab_cos[degres/10]){
-    tab_cos[degres/10] = cos(radians)*100;
+  if (!tab_cos[degres/5]){
+    tab_cos[degres/5] = cos(radians)*100;
   }
-  return tab_cos[degres/10]*100;
+  return tab_cos[degres/5]/100.;
 }
-*/
 void init_draw(Figure * shape, int radius){
   int i = 0;
   int j = 0;
@@ -51,10 +50,10 @@ void init_draw(Figure * shape, int radius){
 
 
 void get_led_val(bool values[]){
-  double alpha = get_current_angle();
+  float alpha = get_current_angle();
   alpha *= -1;
   alpha -= (M_PI/2+RETARD); // led vers le haut par défaut
-  int x = m_radius * cos(alpha);// 0
+  int x = m_radius * compute_cos(alpha);// 0
   int y = m_radius * sin(alpha); // 17
   for (int i = 0; i < NB_LED; i++){
     int x_centre = m_radius;
