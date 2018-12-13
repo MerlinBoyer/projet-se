@@ -42,9 +42,6 @@ ISR (INT0_vect){
     if (MAX_SAMPLES <= nb_samples){
       nb_samples = 0;
       has_noval = false;
-      char str[50];
-      sprintf(str, "%d", (int)(avg_time*1000));
-      ble_send_str(str);
     }
     float time_passed = compute_time_passed();
     avg_time += (time_passed - samples_time[nb_samples]) / MAX_SAMPLES;
