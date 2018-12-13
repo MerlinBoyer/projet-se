@@ -68,7 +68,7 @@ void main(){
   //char * out; 
   while (1){
     //draw();    
-    draw_simple();
+    draw();
     //ble_send_str(get_time_str(out));
   }
 }

@@ -1,0 +1,19 @@
+
+
+
+struct Ffloat {
+  int value;
+  int coma_index;
+};
+
+
+Ffloat ffloat_new(int value, int coma_index){
+  Ffloat out;
+  out.value = value;
+  out.coma_index = coma_index;
+}
+
+
+Ffloat ffloat_add_ffloat(Ffloat a, Ffloat b){
+
+}

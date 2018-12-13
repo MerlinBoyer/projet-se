@@ -6,8 +6,6 @@
 #include <stdio.h>
 #include "bluetooth.h"
 
-#define NOVAL -1
-
 unsigned char MAX_SAMPLES = 25;
 float samples_time[25] = {0};
 unsigned char MAX_TCNT = 255; // TCNT0 = 1 register = 8 bits
@@ -28,6 +26,7 @@ ISR (TIMER0_OVF_vect){
 }
 
 float compute_time_passed(){
+  // return (nb_tim_isr*1000 + ((TCNT0-MAX_TCNT+NB_INC_INT)*1000/NB_INC_INT))*PERIOD; temps passé * 1000
   return (nb_tim_isr + ((TCNT0-MAX_TCNT+NB_INC_INT)/(float)NB_INC_INT)) * PERIOD;
 }
 
@@ -43,6 +42,7 @@ ISR (INT0_vect){
       nb_samples = 0;
       has_noval = false;
     }
+    // int time_passed ...
     float time_passed = compute_time_passed();
     avg_time += (time_passed - samples_time[nb_samples]) / MAX_SAMPLES;
     samples_time[nb_samples] = time_passed;
@@ -69,7 +69,6 @@ void init_monitor(){
 float get_current_angle(){
   if (has_noval) return 0;
   float one_tour_time = avg_time;
-  one_tour_time = 0.110;
   float time_passed = compute_time_passed();
   return (time_passed/one_tour_time * 2*M_PI);
 }
@@ -77,7 +76,7 @@ float get_current_angle(){
 //degres
 double get_current_angle_degree(){
   if (nb_samples == 0) return 0;
-  double one_tour_time = 1/avg_speed;
+  double one_tour_time = avg_time;
   double time_passed = compute_time_passed();
   return (time_passed/one_tour_time * 360);
 }
