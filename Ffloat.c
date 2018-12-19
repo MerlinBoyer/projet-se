@@ -1,5 +1,8 @@
 #include "Ffloat.h"
 
+const long power_val[] = {1,10,100,1000,10000,100000,1000000,10000000,100000000, 1000000000};
+
+
 typedef struct Ffloat Ffloat;
 
 /*
@@ -9,6 +12,7 @@ Ffloat ffloat_new(int value, int coma_index){
   Ffloat out;
   out.value = value;
   out.coma_index = coma_index;
+  return out;
 }
 
 
@@ -16,20 +20,12 @@ Ffloat ffloat_add_ffloat(Ffloat a, Ffloat b){
   Ffloat out;
   if (b.coma_index > a.coma_index){
     int diff = a.coma_index-b.coma_index;
-    diff *= -1;
-    int multiplier = 1;
-    for(int i = 0; i < diff; i++){
-      multiplier *= 10;
-    }
+    int multiplier = -1*power_val[diff];
     out.coma_index = b.coma_index;
     out.value = a.value*multiplier+b.value;
   } else {
     int diff = b.coma_index-a.coma_index;
-    diff *= -1;
-    int multiplier = 1;
-    for(int i = 0; i < diff; i++){
-      multiplier *= 10;
-    }
+    int multiplier = -1*power_val[diff];
     out.coma_index = a.coma_index;
     out.value = b.value*multiplier+a.value;
   }  
@@ -72,6 +68,11 @@ Ffloat ffloat_mult_ffloat(Ffloat a, Ffloat b){
   Ffloat out;
   out.value = a.value * b.value;
   out.coma_index = a.coma_index + b.coma_index;
+  if (out.coma_index > 10){
+    int diff = out.coma_index - 10;
+    out.value /= power_val[diff];
+    out.coma_index -= diff;
+  }
   return out;
 }
 
@@ -89,18 +90,27 @@ Ffloat ffloat_mult_int(Ffloat a, int b){
 
 Ffloat ffloat_div_ffloat(Ffloat a, Ffloat b){
   int multiplier = 1;
-  int n = 0;
-  while (a.value*multiplier < b.value){
+  int n = 0;  
+  while (a.value*multiplier < b.value && n < 10){
     multiplier *= 10;
     n++;
   }
-  for(int i = 0; i < DIV_ACC; i++){
-    multiplier *= 10;
-  }
+  multiplier *= power_val[DIV_ACC];
   Ffloat out;
   out.value = a.value * multiplier / b.value;
   out.coma_index = DIV_ACC + n + a.coma_index - b.coma_index;
+  if (out.coma_index > 10){
+    int diff = out.coma_index - 10;
+    out.value /= power_val[diff];
+    out.coma_index -= diff;
+  }
   return out;
+}
+
+Ffloat int_div_int(int a, int b){
+  Ffloat temp1 = ffloat_new(a, 0);
+  Ffloat temp2 = ffloat_new(b, 0);
+  return ffloat_div_ffloat(temp1, temp2);
 }
 
 Ffloat int_div_ffloat(int a, Ffloat b){
@@ -115,4 +125,14 @@ Ffloat ffloat_div_int(Ffloat a, int b){
   temp.value = b;
   temp.coma_index = 0;
   return ffloat_div_ffloat(a, temp);
+}
+
+float Ffloat_to_float(Ffloat a){
+  if (a.coma_index >= 0){
+    int diviser = power_val[a.coma_index];
+    return (float)(a.value) / ((float) diviser);
+  } else {
+    int multiplier = power_val[-1*a.coma_index];
+    return a.value * multiplier;
+  }
 }
