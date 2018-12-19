@@ -15,6 +15,13 @@ void figure_set_pixel(Figure *f, int i, int j, bool value){
     f->pixels[i][j1] &= ~(1 << j2);
 }
 
+void figure_set_quadrant(Figure *f, int quadrant, const unsigned char *chiffre){
+  return;
+  /*
+    TO DO
+  */
+}
+
 void figure_init(Figure *f){
   for (int i = 0; i < SIZE; i++)
     for (int j = 0; j < SIZE/8+1; j++)
