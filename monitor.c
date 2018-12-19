@@ -32,7 +32,7 @@ int compute_time_passed(){
 
 
 
-ISR (INT0_vect){;
+ISR (INT0_vect){
   if (first_int) {
     first_int = false;
     return;

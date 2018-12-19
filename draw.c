@@ -108,5 +108,3 @@ void draw(){
   bool values[NB_LED] = {0}; 
   get_led_val(values);
 }
-
-
