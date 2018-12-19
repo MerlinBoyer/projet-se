@@ -3,6 +3,6 @@
 
 void init_monitor();
 float get_current_angle_degree();
-float get_current_angle();
+int get_current_angle();
 
 #endif

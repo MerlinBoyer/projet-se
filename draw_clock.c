@@ -43,14 +43,39 @@ void union_fig(Figure * fig1, Figure * fig2, int size, Figure * out){
   }
 }
 
+void print_img(Figure * f){
+  int j = SIZE/2;   // 16
+  for (int i = 0; i < SIZE; i++){
+    figure_set_pixel(f, i, j, true);
+  }
+  /*j = 3*SIZE/4;
+  for (int i = 3; i < SIZE-3; i++){
+    figure_set_pixel(f, i, j, true);    
+  }
+  int i = 3;
+  for(int j = SIZE/4; j < SIZE/4+3; j++)
+    figure_set_pixel(f, i, j, true);
+  i = SIZE-4;
+  for(int j = SIZE/4; j < SIZE/4+3; j++)
+    figure_set_pixel(f, i, j, true);
+  
+  i = 3;
+  for(int j = 3*SIZE/4; j < 3*SIZE/4+3; j++)
+    figure_set_pixel(f, i, j, true);
+  i = SIZE-4;
+  for(int j = 3*SIZE/4; j < 3*SIZE/4+3; j++)
+  figure_set_pixel(f, i, j, true);*/
+}
+
 void init_clock(){
-  Figure aiguille_h; figure_init(&aiguille_h);
+  /*Figure aiguille_h; figure_init(&aiguille_h);
   Figure aiguille_m; figure_init(&aiguille_m);
   Figure aiguille_s; figure_init(&aiguille_s);
-  init_aiguilles(&aiguille_h, &aiguille_m, &aiguille_s);
+  init_aiguilles(&aiguille_h, &aiguille_m, &aiguille_s);*/
   Figure clock; figure_init(&clock);
-  union_fig(&aiguille_h, &aiguille_m, SIZE, &clock);
-  union_fig(&clock, &aiguille_s, SIZE, &clock);
+  /*union_fig(&aiguille_h, &aiguille_m, SIZE, &clock);
+    union_fig(&clock, &aiguille_s, SIZE, &clock);*/
+  print_img(&clock);
   init_draw(&clock, SIZE/2); // 16
   init_monitor();
 }

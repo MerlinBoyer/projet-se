@@ -1,4 +1,5 @@
 #include "figure.h"
+#include "math.h"
 
 bool figure_get_pixel(Figure *f, int i, int j){
   int j1 = j / 8;
