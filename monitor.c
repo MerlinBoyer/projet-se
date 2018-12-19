@@ -46,6 +46,7 @@ ISR (INT0_vect){;
 }
 
 void init_monitor(){
+  ble_send_str("intit monitor\n");
   nb_tim_isr = 0;
   TCNT0 = 0;   // for 1 ms at 13 MHz, to chan
   TCCR0 = (1 << CS00);  // Timer mode with 1024 prescler, 12.69 for 1ms
