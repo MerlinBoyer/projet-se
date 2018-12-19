@@ -32,6 +32,7 @@ float compute_time_passed(){
 
 
 ISR (INT0_vect){
+  ble_send_str("jai fait une interruption\n");
   if (first_int) {
     first_int = false;
     return;
@@ -54,6 +55,7 @@ ISR (INT0_vect){
 }
 
 void init_monitor(){
+  ble_send_str("intit monitor\n");
   nb_tim_isr = 0;
   avg_time = 0;
   nb_samples = 0;
@@ -74,9 +76,13 @@ float get_current_angle(){
 }
 
 //degres
-double get_current_angle_degree(){
+float get_current_angle_degree(){
   if (nb_samples == 0) return 0;
-  double one_tour_time = avg_time;
-  double time_passed = compute_time_passed();
+  float one_tour_time = avg_time;
+  float time_passed = compute_time_passed();
+  //char tour[60];
+  //sprintf(tour,"%d",time_passed/one_tour_time * 360);
+  //ble_send_str(tour);
+  //ble_send_str("\n");
   return (time_passed/one_tour_time * 360);
 }
