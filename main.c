@@ -7,25 +7,32 @@
 #include "led.h"
 #include "draw_clock.h"
 #include "draw.h"
-#include "hallSensor.h"
+#include "clockwise.h"
 
-//////       Initialisation          ////////
+
+
+
+//////////////     Initialisation          ////////////
 
 volatile int last_buffer_index;
 struct Time t = {22,15,0};
 char t_str[999];
+enum Mode{CLOCKWISE, CHIFFRES} mode;
 
-
-
+/*
+*  call all initialisation functions required
+*/
 void global_init()
 {
   bluetooth_init();         // init ble
-  last_buffer_index = current_index_buff;   // init buffer for ble receiving
-  init_time(t);         // init timers and time counting (time.c)
+  last_buffer_index = current_index_buff;   // set buffer index for ble data reception
+  init_time(t);             // init timers and time counting (time.c)
   SPI_MasterInit();         // init SPI comm (led.c)
   init_clock();
-  sei();             // Allow interrupt
-  ble_send_str("init ok\n");
+  sei();                    // Allow interruptions
+
+    // alert user that init is over
+  ble_send_str("init ok\n"); 
   set_leds(0xFF, 0xFF);
   _delay_ms(250);
   set_leds(0x00, 0x00);
@@ -34,16 +41,12 @@ void global_init()
 
 
 ///// checking functions  ///////
-
 /*
 *  Check if data have been saved into ble buffer
 *  then update current index and send data to ble
 */
 void check_ble()
 {
-//    char nb[60];
-//    sprintf( nb, "%d", current_index_buff);
-//    ble_send_str( nb );
   while( last_buffer_index != current_index_buff){
       last_buffer_index++;
       if( last_buffer_index >= MAXBUFF){
@@ -54,11 +57,10 @@ void check_ble()
 }
 
 /*
-*  Run rouXotines to updates some data
+*  Run routines to update data
 */
 void check(){
   check_ble();
-  //check_hall();
 }
 
 
@@ -66,20 +68,15 @@ void check(){
 
 
 void main(){
-  global_init();
+  mode = CLOCKWISE;   // set mode to print clockwises or numbers
+  global_init();      // call all initialisations
   _delay_ms(1);
-<<<<<<< HEAD
-  struct Time t = {9, 25, 30};
-  init_time(t);
-  //char * out; 
-=======
->>>>>>> 3a5a1b93719066e8ada3615c38c42165dc089a31
   while (1){
-    draw_simple();
-    // draw();
-    //ble_send_str(get_time_str(out));
+    if (mode == CLOCKWISE){
+      draw_clockwise();
+    }else if ( mode == CHIFFRES){
+      draw();
+    }
     //_delay_ms(250);
   }
 }
-
-//draw_circles();

@@ -64,13 +64,3 @@ int get_current_angle(){
   long time_passed = compute_time_passed();
   return time_passed*1000/one_tour_time * 360 / 1000;
 }
-<<<<<<< HEAD
-
-//degres
-int get_current_angle_degree(){
-  int one_tour_time = last_time;
-  double time_passed = compute_time_passed();
-  return (time_passed*10000/one_tour_time * 360 / 10000);
-}
-=======
->>>>>>> 3a5a1b93719066e8ada3615c38c42165dc089a31

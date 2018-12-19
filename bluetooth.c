@@ -8,24 +8,24 @@
 #include "bluetooth.h"
 #define MYUBRR FOSC / 8 / BAUD - 1
 
-/////   Setup Usart for Ble device com  //////
-
+///////////////////////   Setup Usart for Ble device com  /////////////////
 void USART_init(unsigned int ubrr)
 {
-  // init buffer for reception
+   // init buffer for reception
   current_index_buff = 0;
-  /* Set baud rate */
+   /* Set baud rate */
   UBRR0H = (unsigned char)(ubrr >> 8);
   UBRR0L = (unsigned char)ubrr;
-  /* Enable receiver and transmitter */
+   /* Enable receiver and transmitter */
   UCSR0A |= (1 << U2X);
   UCSR0B |= (1 << RXEN0) | (1 << TXEN0) | _BV(RXCIE0);
-  /* Set frame format: 8bits data */
+   /* Set frame format: 8bits data */
   UCSR0C = (3 << UCSZ00);
 }
 
-/// Send  ///
 
+
+////////////////    Send    //////////////////
 /*
 *  write a carac on usart
 */
@@ -48,25 +48,10 @@ static void USART_send_str(const char *str)
   }
 }
 
-///  Receive  ///
 
+///////////////////    Reception    //////////////
 /*
-*  read str on usart (synchronous)
-// */
-// static void USART_get_data(char *out)
-// {
-//   int i = 0;
-//   char c;
-//   do
-//   {
-//     c = USART_get_char();
-//     out[++i] = c;
-//   } while (c);
-// }
-
-
-/*
-*  interrupt on usart receive :
+*  interrupt when usart reception is trigerred :
 *  write carac into buffer and increment buffer index
 */
 ISR(USART0_RX_vect)
@@ -80,13 +65,10 @@ ISR(USART0_RX_vect)
   USART_buffer[current_index_buff] = UDR0;
 }
 
-////////    Ble functions      ////////////
 
-// void ble_get_data(char *str)
-// {
-//   USART_get_data(str);
-// }
 
+
+//////////////    Ble functions      ////////////
 void bluetooth_init()
 {
   USART_init(MYUBRR);
