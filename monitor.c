@@ -58,14 +58,14 @@ void init_monitor(){
 
 // radians
 int get_current_angle(){
-  int one_tour_time = last_time;
-  float time_passed = compute_time_passed();
+  long long one_tour_time = last_time;
+  long long time_passed = compute_time_passed();
   return time_passed*1000/one_tour_time * 360 / 1000;
 }
 
 //degres
-float get_current_angle_degree(){
-  int one_tour_time = last_time;
-  double time_passed = compute_time_passed();
-  return (time_passed*10000/one_tour_time * 360 / 10000);
+int get_current_angle_degree(){
+  long long one_tour_time = last_time;
+  long long time_passed = compute_time_passed();
+  return (time_passed*1000/one_tour_time * 360 / 1000);
 }

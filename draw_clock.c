@@ -45,7 +45,7 @@ void union_fig(Figure * fig1, Figure * fig2, int size, Figure * out){
 
 void print_img(Figure * f){
   int j = SIZE/2;   // 16
-  for (int i = 0; i < SIZE; i++){
+  for (int i = 0; i < SIZE-5; i++){
     figure_set_pixel(f, i, j, true);
   }
   /*j = 3*SIZE/4;

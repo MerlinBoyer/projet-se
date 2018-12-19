@@ -62,14 +62,20 @@ void check(){
 /////            Main              ////////
 
 
-void main(){
+void main(){  
   global_init();
   _delay_ms(1);
+  // struct Time t =  {9, 52, 30};
+  // init_time(t);
+  char out[99];
+  
   //char * out; 
   while (1){
-    draw();    
-    // draw();
-    //ble_send_str(get_time_str(out));
+    // get_time_str(out);
+    //draw();    
+    draw();
+    // ble_send_str(out);
+    // _delay_ms(1000);
   }
 }
 

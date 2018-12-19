@@ -22,6 +22,9 @@ float m_radius;
 
 int last_angle = 0;
 
+bool led_values[NB_LED] = {0};
+
+
 int abs(int v){
   return (v >= 0)?v:-1*v;
 }
@@ -39,7 +42,7 @@ float compute_cosinus(int degres){
 
 float compute_sinus(int degres){
   if (degres <= 90)
-    return cosinus[abs(degres)];
+    return cosinus[abs(90-degres)];
   else if (degres <= 180)
     return cosinus[abs(90-(180-degres))];    
   else if (degres <= 270)
@@ -62,13 +65,13 @@ void init_draw(Figure * shape, int radius){
 #define NB_CADRANS 1
 
 void get_led_val(bool values[]){
-  //_delay_us(50);
-  all_leds_OFF();
+  // _delay_us(100);
   int alpha = get_current_angle();  
   if (last_angle != alpha){
     last_angle = alpha;
   }
   else return;
+  all_leds_OFF();
   alpha *= -1;
   alpha -= (90-RETARD); // led vers le haut par défaut
   while (alpha < 0)
@@ -79,6 +82,7 @@ void get_led_val(bool values[]){
   int y = m_radius * s; // 16
   char val1 = 0;
   char val2 = 0;
+  bool diff = false;
   for (int i = 0; i < NB_LED; i++){
     int x_centre = m_radius;
     int y_centre = m_radius;
@@ -88,19 +92,24 @@ void get_led_val(bool values[]){
     if (i == 0)
       continue;
     if (i <= 8){
-      if (values[i])
+      if (values[i] && !led_values[i])
 	val2 |= (1 << i-1);
-      else
+      else if (led_values[i])
 	val2 &= ~(1 << i-1);
     }
     else {
-      if (values[i])
+      if (values[i] && !led_values[i])
 	val1 |= (1 << (i-9));
-      else
+      else if (led_values[i])
 	val1 &= ~(1 << (i-9));
     }
+    if (led_values[i] != values[i]){
+      diff = true;
+      led_values[i] = values[i];
+    }
   }
-  set_leds(val1, val2);
+  if (diff)
+    set_leds(val1, val2);
 }
 
 void draw(){
@@ -154,9 +163,7 @@ void draw_simple(){
           }
         }
       }
-      cli();
       set_leds(val1,val2);
-      sei();
   }
 
   //minutes  
