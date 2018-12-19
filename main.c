@@ -65,6 +65,8 @@ void check(){
 void main(){
   global_init();
   _delay_ms(1);
+  struct Time t = {9, 25, 30};
+  init_time(t);
   //char * out; 
   while (1){
     draw();    

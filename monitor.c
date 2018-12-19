@@ -32,7 +32,7 @@ int compute_time_passed(){
 
 
 
-ISR (INT0_vect){;
+ISR (INT0_vect){
   if (first_int) {
     first_int = false;
     return;
@@ -65,7 +65,7 @@ int get_current_angle(){
 }
 
 //degres
-float get_current_angle_degree(){
+int get_current_angle_degree(){
   int one_tour_time = last_time;
   double time_passed = compute_time_passed();
   return (time_passed*10000/one_tour_time * 360 / 10000);

@@ -109,23 +109,43 @@ void draw(){
 }
 
 void draw_simple(){
-  double angle = get_current_angle_degree();
+  int angle = get_current_angle_degree();
   struct Time t = get_time();
 
   //t.hours = 4;
   //t.minutes = 30;
   //t.seconds = 45;
 
-  int a = 22;
-  int b = 25;
-
   uint8_t val1;
   uint8_t val2;
+
+/*
+  int Hour[12][60];
+  set_leds(0x00,0x00);
+
+  while(1)
+  {
+    for (int i = 0; i<6; i++ )
+    {
+      Hour[i][t.hours] = 1;
+      Hour[i][]
+    }
+     for (int i = 0; i<12; i++)
+     {
+       Hour[i][t.minutes] = 
+     } 
+  }
+*/
+
+
+
+  //int a = 22;
+  //int b = 25;
 
   // hours : from 0 to 23
   for (int i=0; i<12; i++)
   {
-      if (a == i || a == 12+i)
+      if (t.hours == i || t.hours == 12+i)
       {
         if (i<6)
         {
@@ -154,11 +174,11 @@ void draw_simple(){
           }
         }
       }
-      cli();
       set_leds(val1,val2);
-      sei();
+      ble_send_str(t.hours);
   }
 
+/*
   //minutes  
   if (b<30)
   {
@@ -188,7 +208,7 @@ void draw_simple(){
   }
   set_leds(val1,val2);
   
-/*
+
   // secondes  
   if (t.seconds<30)
   {
