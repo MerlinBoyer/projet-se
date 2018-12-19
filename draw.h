@@ -8,6 +8,5 @@
 
 void init_draw(Figure * shape, int radius);
 void draw();
-void draw_simple();
 
 #endif
