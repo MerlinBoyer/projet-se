@@ -32,7 +32,7 @@ float compute_time_passed(){
 
 
 ISR (INT0_vect){
-  ble_send_str("jai fait une interruption\n");
+  ble_send_str("interruption\n");
   if (first_int) {
     first_int = false;
     return;
