@@ -140,7 +140,6 @@ void draw_simple(){
        Hour[i][t.minutes] = 
      } 
   }
-*/
 
 
 
