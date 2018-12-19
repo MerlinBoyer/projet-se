@@ -8,10 +8,12 @@
 #include "figure.h"
 #include "time.h"
 #include "Ffloat.h"
+#include "bluetooth.h"
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
 #define RETARD M_PI/10
+#define DISPLAY_PRECISION 5  // angle offset when checking angle
 
 const char truc[34][17] = {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},{0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1},{0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,2},{0,0,0,0,1,1,1,1,1,1,1,1,2,2,2,2,2},{0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,2,3},{0,0,0,1,1,1,1,1,2,2,2,2,2,2,3,3,3},{0,0,0,1,1,1,1,2,2,2,2,2,3,3,3,3,4},{0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4},{0,0,1,1,1,1,2,2,2,3,3,3,3,4,4,4,5},{0,0,1,1,1,2,2,2,3,3,3,3,4,4,4,5,5},{0,0,1,1,1,2,2,2,3,3,3,4,4,4,5,5,6},{0,0,1,1,2,2,2,3,3,3,4,4,5,5,5,6,6},{0,0,1,1,2,2,2,3,3,4,4,4,5,5,6,6,7},{0,0,1,1,2,2,3,3,4,4,4,5,5,6,6,7,7},{0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8},{0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8},{0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9},{0,1,1,2,2,3,3,4,5,5,6,6,7,7,8,8,9},{0,1,1,2,2,3,4,4,5,5,6,7,7,8,8,9,10},{0,1,1,2,3,3,4,4,5,6,6,7,8,8,9,9,10},{0,1,1,2,3,3,4,5,5,6,7,7,8,9,9,10,11},{0,1,1,2,3,3,4,5,6,6,7,8,8,9,10,10,11},{0,1,1,2,3,4,4,5,6,6,7,8,9,9,10,11,12},{0,1,2,2,3,4,5,5,6,7,8,8,9,10,11,11,12},{0,1,2,2,3,4,5,5,6,7,8,9,9,10,11,12,13},{0,1,2,2,3,4,5,6,7,7,8,9,10,11,11,12,13},{0,1,2,3,3,4,5,6,7,8,8,9,10,11,12,13,14},{0,1,2,3,4,4,5,6,7,8,9,10,11,11,12,13,14},{0,1,2,3,4,5,5,6,7,8,9,10,11,12,13,14,15},{0,1,2,3,4,5,6,7,8,8,9,10,11,12,13,14,15},{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16},{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16},{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17}};
 
@@ -108,8 +110,9 @@ void draw(){
   get_led_val(values);
 }
 
+/*
 void draw_simple(){
-  double angle = get_current_angle_degree();
+  double angle = get_current_angle();
   struct Time t = get_time();
 
   //t.hours = 4;
@@ -154,9 +157,7 @@ void draw_simple(){
           }
         }
       }
-      cli();
       set_leds(val1,val2);
-      sei();
   }
 
   //minutes  
@@ -188,7 +189,7 @@ void draw_simple(){
   }
   set_leds(val1,val2);
   
-/*
+
   // secondes  
   if (t.seconds<30)
   {
@@ -217,6 +218,38 @@ void draw_simple(){
     }
   }
   set_leds(val1,val2);
-  */
+  
  
+}*/
+int get_angle_from_h( int h ){
+  return 30 * (h % 12);
 }
+
+int get_angle_from_m( int m){
+  return 6 * m;
+}
+
+int get_angle_from_s( int s){
+  return 6 * s;
+}
+
+void draw_simple(){
+  int real_angle = (get_current_angle() + 180)%360;
+  struct Time t = get_time();
+  uint8_t leds_bottom = 0x00;
+  uint8_t leds_top = 0x00;
+
+  if ( real_angle <= get_angle_from_h(t.hours) + DISPLAY_PRECISION &&  real_angle >= get_angle_from_h(t.hours) - DISPLAY_PRECISION){
+    leds_bottom = 0xFF;
+  }
+  if ( real_angle <= get_angle_from_m( t.minutes ) + DISPLAY_PRECISION && real_angle >= get_angle_from_m( t.minutes ) - DISPLAY_PRECISION){
+    leds_bottom = 0xFF;
+    leds_top = 0x7F;
+  }
+  if ( real_angle <= get_angle_from_s( t.seconds )){
+    leds_top |= 0x80;
+  }
+
+  set_leds(leds_top, leds_bottom);
+}
+

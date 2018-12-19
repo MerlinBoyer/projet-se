@@ -43,14 +43,15 @@ ISR (INT0_vect){;
   }
   nb_tim_isr = 0;
   TCNT0 = 0;  
-  begun = true;  
+  begun = true;
+  
+  //ble_send_str_from_int( (int)last_time );
 }
 
 void init_monitor(){
-  ble_send_str("intit monitor\n");
   nb_tim_isr = 0;
   TCNT0 = 0;   // for 1 ms at 13 MHz, to chan
-  TCCR0 = (1 << CS00);  // Timer mode with 1024 prescler, 12.69 for 1ms
+  TCCR0 = (1 << CS00);
   TIMSK |= (1 << TOIE0) ;   // Enable timer1 overflow interrupt(TOIE0)
   PIND |= (1 << PIND0); // config pin PD0 en entrée
   EICRA |= (1 << ISC00);
@@ -59,14 +60,7 @@ void init_monitor(){
 
 // radians
 int get_current_angle(){
-  int one_tour_time = last_time;
-  float time_passed = compute_time_passed();
+  long one_tour_time = last_time;
+  long time_passed = compute_time_passed();
   return time_passed*1000/one_tour_time * 360 / 1000;
-}
-
-//degres
-float get_current_angle_degree(){
-  int one_tour_time = last_time;
-  double time_passed = compute_time_passed();
-  return (time_passed*10000/one_tour_time * 360 / 10000);
 }
