@@ -4,6 +4,7 @@
 #include <util/delay.h>
 #include <util/setbaud.h>
 #include <avr/interrupt.h>
+#include <stdio.h>
 #include "bluetooth.h"
 #define MYUBRR FOSC / 8 / BAUD - 1
 
@@ -99,6 +100,13 @@ void ble_send_char(unsigned char c)
 void ble_send_str(unsigned char *str)
 {
   USART_send_str(str);
+}
+
+void ble_send_str_from_int( int x ){
+  char str[60];
+  sprintf( str, "%f", x);
+  USART_send_str(str);
+  USART_send_str("\n");
 }
 
 /////////////////////////////////////////////////

@@ -5,9 +5,7 @@
 volatile unsigned char USART_buffer[MAXBUFF];
 volatile int current_index_buff;
 
-/*
-  Wait for input from bluetooth
- */
+void ble_send_str_from_int( int x );
 void ble_send_str(unsigned char *str);
 /*
   Send string with bluetooth

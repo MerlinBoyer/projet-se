@@ -12,7 +12,7 @@
 //////       Initialisation          ////////
 
 volatile int last_buffer_index;
-struct Time t = {0,0,0};
+struct Time t = {22,15,0};
 char t_str[999];
 
 
@@ -26,6 +26,9 @@ void global_init()
   init_clock();
   sei();             // Allow interrupt
   ble_send_str("init ok\n");
+  set_leds(0xFF, 0xFF);
+  _delay_ms(250);
+  set_leds(0x00, 0x00);
 }
 
 
@@ -55,7 +58,7 @@ void check_ble()
 */
 void check(){
   check_ble();
-  check_hall();
+  //check_hall();
 }
 
 
@@ -65,13 +68,17 @@ void check(){
 void main(){
   global_init();
   _delay_ms(1);
+<<<<<<< HEAD
   struct Time t = {9, 25, 30};
   init_time(t);
   //char * out; 
+=======
+>>>>>>> 3a5a1b93719066e8ada3615c38c42165dc089a31
   while (1){
-    draw();    
+    draw_simple();
     // draw();
     //ble_send_str(get_time_str(out));
+    //_delay_ms(250);
   }
 }
 
