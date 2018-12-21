@@ -10,5 +10,6 @@ struct Time {
 void init_time(struct Time t);
 struct Time get_time();
 void get_time_str(char * t);
+int time_has_changed();
 
 #endif

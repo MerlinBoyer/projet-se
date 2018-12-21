@@ -45,16 +45,18 @@ void union_fig(Figure * fig1, Figure * fig2, int size, Figure * out){
 
 void print_img(Figure * f){
   int j = SIZE/2;   // 16
-  for (int i = 0; i < SIZE-5; i++){
+  for (int i = 13; i < SIZE-12; i++){
     figure_set_pixel(f, i, j, true);
   }
   /*j = 3*SIZE/4;
   for (int i = 3; i < SIZE-3; i++){
     figure_set_pixel(f, i, j, true);    
-  }
-  int i = 3;
-  for(int j = SIZE/4; j < SIZE/4+3; j++)
-    figure_set_pixel(f, i, j, true);
+    }*/
+  int i = 13;
+  j = SIZE/2;
+  for(int k = 0; k < 3; k++)
+    figure_set_pixel(f, i+k, j-k, true);
+  /*
   i = SIZE-4;
   for(int j = SIZE/4; j < SIZE/4+3; j++)
     figure_set_pixel(f, i, j, true);

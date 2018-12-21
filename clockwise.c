@@ -8,6 +8,7 @@
 #include "Ffloat.h"
 #include "bluetooth.h"
 #include "clockwise.h"
+#include "monitor.h"
 
 #define DISPLAY_PRECISION 3  // angle offset when checking angle
 

@@ -8,14 +8,14 @@
 #include "draw_clock.h"
 #include "draw.h"
 #include "clockwise.h"
-
+#include "monitor.h"
 
 
 
 //////////////     Initialisation          ////////////
 
 volatile int last_buffer_index;
-struct Time t = {22,15,0};
+struct Time t = {05,44,0};
 char t_str[999];
 enum Mode{CLOCKWISE, CHIFFRES} mode;
 
@@ -28,11 +28,12 @@ void global_init()
   last_buffer_index = current_index_buff;   // set buffer index for ble data reception
   init_time(t);             // init timers and time counting (time.c)
   SPI_MasterInit();         // init SPI comm (led.c)
-  init_clock();
+  // init_clock();
+  init_monitor();
   sei();                    // Allow interruptions
 
     // alert user that init is over
-  ble_send_str("init ok\n"); 
+  ble_send_str("iXFnit ok\n"); 
   set_leds(0xFF, 0xFF);
   _delay_ms(250);
   set_leds(0x00, 0x00);
@@ -65,16 +66,17 @@ void check(){
 
 
 /////            Main              ////////
-
-
 void main(){
-  mode = CLOCKWISE;   // set mode to print clockwises or numbers
+  mode = CHIFFRES;   // set mode to print clockwises or numbers
   global_init();      // call all initialisations
   _delay_ms(1);
+  char str[99];
   while (1){
     if (mode == CLOCKWISE){
       draw_clockwise();
-    }else if ( mode == CHIFFRES){
+    } else if ( mode == CHIFFRES){
+      get_time_str(str);
+      update(str);
       draw();
     }
     //_delay_ms(250);
