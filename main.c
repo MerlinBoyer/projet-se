@@ -16,6 +16,7 @@
 volatile int last_buffer_index;
 struct Time t = {05,44,0};
 char t_str[999];
+char new_time[6];
 enum Mode{CLOCKWISE, CHIFFRES} mode;
 
 /*
@@ -31,7 +32,7 @@ void global_init()
   sei();                    // Allow interruptions
 
     // alert user that init is over
-  ble_send_str("iXFnit ok\n"); 
+  ble_send_str("init ok\n");
   set_leds(0xFF, 0xFF);
   _delay_ms(250);
   set_leds(0x00, 0x00);
@@ -46,30 +47,42 @@ void global_init()
 */
 void check_ble()
 {
-  while( last_buffer_index != current_index_buff){
+  if( last_buffer_index >= MAXBUFF){
+      last_buffer_index = 100;
+  }
+  while( last_buffer_index < current_index_buff){
       last_buffer_index++;
-      if( last_buffer_index >= MAXBUFF){
-          last_buffer_index = 0;
+
+      char c =  USART_buffer[last_buffer_index ];
+      char s[10];
+      sprintf(s, "%d", last_buffer_index);
+      ble_send_str( s );
+      if(c == 'c'){
+        mode = CHIFFRES;
       }
-      ble_send_char( USART_buffer[last_buffer_index ]);
+      if(c == 'a'){
+        mode = CLOCKWISE;
+      }
+      // if( c == 'h'){
+      //   set_heure = 1;
+      //   return;
+      // }
+      // if(c=='1' || c=='2' || c=='3' || c=='4' || c=='5' || c=='6' || c=='7' || c=='8' || c=='9'){
+      //   new_time
+      // }
   }
 }
 
-/*
-*  Run routines to update data
-*/
-void check(){
-  check_ble();
-}
 
 
 /////            Main              ////////
 void main(){
-  mode = CHIFFRES;   // set mode to print clockwises or numbers
+  mode = CLOCKWISE;   // set mode to print clockwises or numbers
   global_init();      // call all initialisations
   _delay_ms(1);
   char str[99];
   while (1){
+    check_ble();
     if (mode == CLOCKWISE){
       draw_clockwise();
     } else if ( mode == CHIFFRES){

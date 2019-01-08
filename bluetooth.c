@@ -37,7 +37,7 @@ static void USART_send_char(unsigned char c)
 }
 
 /*
-*  write each string carac on USART 
+*  write each string carac on USART
 */
 static void USART_send_str(const char *str)
 {
@@ -56,7 +56,7 @@ static void USART_send_str(const char *str)
 */
 ISR(USART0_RX_vect)
 {
-  //ble_send_str("Ble interrupt received ");
+  ble_send_str("Ble interrupt received ");
   current_index_buff++;
   if (current_index_buff >= MAXBUFF)
   {
