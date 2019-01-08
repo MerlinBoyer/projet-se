@@ -5,7 +5,6 @@
 #include "bluetooth.h"
 #include "time.h"
 #include "led.h"
-#include "draw_clock.h"
 #include "draw.h"
 #include "clockwise.h"
 #include "monitor.h"
@@ -28,7 +27,6 @@ void global_init()
   last_buffer_index = current_index_buff;   // set buffer index for ble data reception
   init_time(t);             // init timers and time counting (time.c)
   SPI_MasterInit();         // init SPI comm (led.c)
-  // init_clock();
   init_monitor();
   sei();                    // Allow interruptions
 

@@ -5,13 +5,14 @@
 #define MAX_CNT 65535
 
 static struct Time m_time;
-static int changed = 0;
+static int min_changed = 1;
 
 ISR (TIMER1_OVF_vect){
   m_time.seconds++;
   if (m_time.seconds >= 60){
     m_time.minutes++;
     m_time.seconds = 0;
+    min_changed = 1;
   }
   if (m_time.minutes >= 60){
     m_time.hours++;
@@ -21,12 +22,11 @@ ISR (TIMER1_OVF_vect){
     m_time.hours = 0;
   }
   TCNT1 = MAX_CNT - 12695;   // for 1 sec at 13 MHz
-  changed = 1;
 }
 
-int time_has_changed(){
-  if (changed){
-    changed = 0;
+int time_min_has_changed(){
+  if (min_changed){
+    min_changed = 0;
     return 1;
   }
   return 0;
