@@ -56,8 +56,12 @@ static void USART_send_str(const char *str)
 */
 ISR(USART0_RX_vect)
 {
-  ble_send_str("Ble interrupt received ");
+  ble_send_str("Ble interrupt received : ");
   current_index_buff++;
+  char scurrent[10];
+  sprintf(scurrent, "%d", (char)current_index_buff);
+  ble_send_str( scurrent );
+  ble_send_char( ' ' );
   if (current_index_buff >= MAXBUFF)
   {
     current_index_buff = 0;

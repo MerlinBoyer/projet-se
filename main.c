@@ -13,7 +13,7 @@
 
 //////////////     Initialisation          ////////////
 
-volatile int last_buffer_index;
+static int last_buffer_index;
 struct Time t = {05,44,0};
 char t_str[999];
 char new_time[6];
@@ -48,7 +48,7 @@ void global_init()
 void check_ble()
 {
   if( last_buffer_index >= MAXBUFF){
-      last_buffer_index = 100;
+      last_buffer_index = 0;
   }
   while( last_buffer_index < current_index_buff){
       last_buffer_index++;
@@ -57,6 +57,11 @@ void check_ble()
       char s[10];
       sprintf(s, "%d", last_buffer_index);
       ble_send_str( s );
+      ble_send_char( ' ' );
+      char scurrent[10];
+      sprintf(scurrent, "%d", current_index_buff);
+      ble_send_str( scurrent );
+      ble_send_char( ' ' );
       if(c == 'c'){
         mode = CHIFFRES;
       }
@@ -70,6 +75,7 @@ void check_ble()
       // if(c=='1' || c=='2' || c=='3' || c=='4' || c=='5' || c=='6' || c=='7' || c=='8' || c=='9'){
       //   new_time
       // }
+      _delay_ms(250);
   }
 }
 
