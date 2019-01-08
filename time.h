@@ -19,9 +19,5 @@ struct Time get_time();
 Return time in a string
  */
 void get_time_str(char * t);
-/*
-Return whether or not the time has changed.
- */
-int time_min_has_changed();
 
 #endif

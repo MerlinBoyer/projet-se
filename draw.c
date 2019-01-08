@@ -20,15 +20,13 @@ static char (*figures[10])[2] = {(char (*)[2])zero, (char (*)[2])un, (char (*)[2
 (char (*)[2])quatre, (char (*)[2])cinq, (char (*)[2])six, (char (*)[2])sept, (char (*)[2])huit, (char (*)[2])neuf};
 
 void update(char * t){
-  if (time_min_has_changed()){
-    cadrans[3] = figures[t[4]-'0'];
-    if (t[4] == '0' || first_display){
-      cadrans[0] = figures[t[3]-'0'];
-      if (t[0] == '0' || first_display){
-	cadrans[2] = figures[t[1]-'0'];
-	if (t[1] == '0' || first_display)
-	  cadrans[1] = figures[t[0]-'0'];	
-      }
+  cadrans[3] = figures[t[4]-'0'];
+  if (t[4] == '0' || first_display){
+    cadrans[0] = figures[t[3]-'0'];
+    if (t[0] == '0' || first_display){
+      cadrans[2] = figures[t[1]-'0'];
+      if (t[1] == '0' || first_display)
+	cadrans[1] = figures[t[0]-'0'];	
     }
   }
 }
