@@ -100,12 +100,17 @@ void set_min(int min)
   ble_send_int(min);
   int min_1 = min%10;
   int min_10 = min/10;
-  for (int i = 8; i < 12; i++)
+  ble_send_str(" min 1 ");
+  ble_send_int(min_1);
+  ble_send_str(" min 10 ");
+  ble_send_int(min_10);
+  for (int i = 10; i < 14; i++)
   {
-    hour[i][0] = numbers[min_1][i][0];
-    hour[i][1] = numbers[min_1][i][1];
-    hour[i+4][0] = numbers[min_10][i][0];
-    hour[i+4][1] = numbers[min_10][i][1];
+    hour[i][0] = numbers[min_1][i-10][0];
+    hour[i][1] = numbers[min_1][i-10][1];
+    hour[i+4][0] = numbers[min_10][i-10][0];
+    hour[i+4][1] = numbers[min_10][i-10][1];
+
 
     // hour[i][0] = *numbers[min_1][0];
     // hour[i][1] = *numbers[min_1][1];
@@ -128,10 +133,10 @@ void set_h(int h)
   int h_10 = h/10;
   for (int i = 20; i < 24; i++)
   {
-    hour[i][0] = numbers[h_1][i][0];
-    hour[i][1] = numbers[h_1][i][1];
-    hour[i+4][0] = numbers[h_10][i][0];
-    hour[i+4][1] = numbers[h_10][i][1];
+    hour[i][0] = numbers[h_1][i-20][0];
+    hour[i][1] = numbers[h_1][i-20][1];
+    hour[i+4][0] = numbers[h_10][i-20][0];
+    hour[i+4][1] = numbers[h_10][i-20][1];
 
     // hour[i][0] = *numbers[h_1][0];
     // hour[i][1] = *numbers[h_1][1];
@@ -154,10 +159,10 @@ void init_hello(){
   // char str[12] = {0};
   // get_time_str( str );
   // ble_send_str( str );
-  // hour[9][0] = space[0][0];
-  // hour[9][1] = space[0][1];
-  // hour[19][0] = space[0][0];
-  // hour[19][1] = space[0][1];
+  hour[9][0] = space[0][0];
+  hour[9][1] = space[0][1];
+  hour[19][0] = space[0][0];
+  hour[19][1] = space[0][1];
 }
 
 

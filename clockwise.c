@@ -27,8 +27,8 @@ int get_angle_from_s( int s){
 
 //////////////////// print clockwise ///////////////
 /*
-*  Set leds off, get time and corresponding angles 
-*  if time angles are same as current angle then turn 
+*  Set leds off, get time and corresponding angles
+*  if time angles are same as current angle then turn
 *  some leds on (hours, minutes or seconds)
 */
 void draw_clockwise(){
@@ -42,7 +42,7 @@ void draw_clockwise(){
   }
   if ( real_angle <= get_angle_from_m( t.minutes ) + DISPLAY_PRECISION && real_angle >= get_angle_from_m( t.minutes ) - DISPLAY_PRECISION){
     leds_bottom = 0xFF;
-    leds_top = 0x7F;
+    leds_top = 0x3F;
   }
   if ( real_angle <= get_angle_from_s( t.seconds )){
     leds_top |= 0x80;
@@ -85,7 +85,7 @@ void draw_simple(){
             val2 = 0x00;
           }
         }
-        else    
+        else
         {
           if (angle >= 30*(i-6) && angle <= 30*(i-6)+10)
           {
@@ -102,7 +102,7 @@ void draw_simple(){
       set_leds(val1,val2);
   }
 
-  //minutes  
+  //minutes
   if (b<30)
   {
     if (angle >= 180+6*b-5 && angle <= 180+6*b+5)
@@ -116,7 +116,7 @@ void draw_simple(){
       val2 = 0x00;
     }
   }
-  else    
+  else
   {
     if (angle >= 10*(b-30)-5 && angle <= 10*(b-30)+5)
     {
@@ -130,9 +130,9 @@ void draw_simple(){
     }
   }
   set_leds(val1,val2);
-  
 
-  // secondes  
+
+  // secondes
   if (t.seconds<30)
   {
     if (angle >= 180 && angle <= 180+6*t.seconds)
@@ -146,7 +146,7 @@ void draw_simple(){
       val2 = 0x00;
     }
   }
-  else    
+  else
   {
     if ((angle >= 180 && angle <= 359) || (angle <= t.seconds*6))
     {
@@ -160,6 +160,6 @@ void draw_simple(){
     }
   }
   set_leds(val1,val2);
-  
- 
+
+
 }*/

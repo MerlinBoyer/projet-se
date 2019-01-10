@@ -33,11 +33,16 @@ void update(char * t){
 
 void set_led_val(){
   int alpha = get_current_angle();
+
+  char leds_seconds = 0x00;
+  if ( (alpha + 180)%360 <= 6 * get_time().seconds ){
+    leds_seconds |= 0x80;
+  }
   alpha = 270-alpha;
   while (alpha < 0)
     alpha = 360 + alpha;
-  set_leds(cadrans[alpha/90][alpha/DIVISOR][0]
-	   , cadrans[alpha/90][alpha/DIVISOR][1]);
+  char v =   cadrans[alpha/90][alpha/DIVISOR][0] & ~(1 << 7);
+  set_leds(v | leds_seconds, cadrans[alpha/90][alpha/DIVISOR][1]);
 }
 
 void draw(){
