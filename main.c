@@ -3,18 +3,17 @@
 #include <stdio.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
-#include "bluetooth.h"
 #include "time.h"
 #include "led.h"
-#include "draw.h"
+#include "bluetooth.h"
+#include "hello.h"
 #include "clockwise.h"
 #include "monitor.h"
-#include "hello.h"
+#include "draw.h"
 
 
 //////////////     Initialisation          ////////////
 
-static int last_buffer_index;
 struct Time t = {02,30,0};
 char t_str[99];
 
@@ -30,13 +29,7 @@ int compteur_hour=0;
 void global_init()
 {
   bluetooth_init();         // init ble
-  //last_buffer_index = current_index_buff;   // set buffer index for ble data reception
   current_index_buff=0;
-  last_buffer_index=current_index_buff;
-  char s[10];
-  sprintf(s, "%d", last_buffer_index);
-  ble_send_str( s );
-  ble_send_char( ' ' );
   char scurrent[10];
   sprintf(scurrent, "%d", current_index_buff);
   ble_send_str( scurrent );
@@ -110,6 +103,12 @@ void check_ble()
 
   if(USART_buffer[0] == 'h'){
     // ble_send_str( "Heure " );
+    int i = 1;
+    for(i=1;i<5;i++){
+      if(USART_buffer[i] == '\0'){
+        return;
+      }
+    }
     unsigned char chiffre1=USART_buffer[1];
     unsigned char chiffre2=USART_buffer[2];
     unsigned char chiffre3=USART_buffer[3];
@@ -128,13 +127,17 @@ void check_ble()
     newtime.minutes = minutes > 59 ? newtime.minutes : minutes;
     newtime.hours = hours > 23 ? newtime.hours : hours;
     set_time( newtime );
+    ble_send_str( "time set\n" );
+  }
 
-    char timestr[20];
+  if ( USART_buffer[0] == 't'){
+    char timestr[20] = "coucou";
     get_time_str(timestr);
-    ble_send_str( "set new time : " );
+    ble_send_str( "time : " );
     ble_send_str( timestr );
     ble_send_char( '\n' );
   }
+
   ble_reset_buff(); // burn after reading
 
 }
@@ -145,7 +148,7 @@ void check_ble()
 
 /////            Main              ////////
 void main(){
-  mode = CLOCKWISE;   // set mode to print clockwises or numbers
+  mode = IMPROVED;   // set mode to print clockwises or numbers
   global_init();      // call all initialisations
   _delay_ms(1);
   char str[99];

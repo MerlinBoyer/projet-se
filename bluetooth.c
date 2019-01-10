@@ -119,7 +119,7 @@ void ble_send_str(unsigned char *str)
 }
 
 void ble_send_int( int x ){
-  char str[15];
+  char str[15] = {0};
   sprintf( str, "%d", x);
   USART_send_str(str);
   USART_send_char(' ');

@@ -10,7 +10,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#define DIVISOR 2
+#define DIVISOR 4
 
 int first_display = 1;
 int last_angle = 0;
@@ -26,7 +26,7 @@ void update(char * t){
     if (t[0] == '0' || first_display){
       cadrans[2] = figures[t[3]-'0'];
       if (t[1] == '0' || first_display)
-	cadrans[1] = figures[t[0]-'0'];	
+	cadrans[1] = figures[t[0]-'0'];
     }
   }
 }
