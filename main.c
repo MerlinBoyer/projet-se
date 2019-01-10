@@ -9,7 +9,7 @@
 #include "draw.h"
 #include "clockwise.h"
 #include "monitor.h"
-
+#include "hello.h"
 
 
 //////////////     Initialisation          ////////////
@@ -45,6 +45,7 @@ void global_init()
   init_time(t);             // init timers and time counting (time.c)
   SPI_MasterInit();         // init SPI comm (led.c)
   init_monitor();
+  init_hello();
   sei();                    // Allow interruptions
 
     // alert user that init is over
@@ -153,7 +154,7 @@ void main(){
     if (mode == CLOCKWISE){
       draw_clockwise();
     } else if ( mode == BASIC){
-      draw_clockwise();
+      draw_hello();
     } else if ( mode == IMPROVED){
       get_time_str(str);
       update(str);
