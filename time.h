@@ -19,5 +19,9 @@ struct Time get_time();
 Return time in a string
  */
 void get_time_str(char * t);
+/*
+set time
+*/
+void set_time(struct Time t);
 
 #endif

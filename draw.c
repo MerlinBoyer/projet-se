@@ -22,9 +22,9 @@ static char (*figures[10])[2] = {(char (*)[2])zero, (char (*)[2])un, (char (*)[2
 void update(char * t){
   cadrans[3] = figures[t[4]-'0'];
   if (t[4] == '0' || first_display){
-    cadrans[0] = figures[t[3]-'0'];
+    cadrans[0] = figures[t[1]-'0'];
     if (t[0] == '0' || first_display){
-      cadrans[2] = figures[t[1]-'0'];
+      cadrans[2] = figures[t[3]-'0'];
       if (t[1] == '0' || first_display)
 	cadrans[1] = figures[t[0]-'0'];	
     }

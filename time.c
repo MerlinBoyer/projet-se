@@ -30,6 +30,9 @@ void init_time(struct Time t){
   TIMSK = (1 << TOIE1) ;   // Enable timer1 overflow interrupt(TOIE1)
 }
 
+void set_time(struct Time t){
+  m_time = t;
+}
 
 struct Time get_time(){
   return m_time;
