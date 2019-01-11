@@ -29,7 +29,6 @@ void USART_init(unsigned int ubrr)
 }
 
 
-
 ////////////////    Send functions    //////////////////
 /*
 *  write a carac on usart

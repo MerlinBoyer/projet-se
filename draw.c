@@ -33,6 +33,7 @@ void update(char * t){
 	cadrans[1] = figures[t[0]-'0'];
     }
   }
+  first_display = 0;
 }
 
 void set_led_val(){
