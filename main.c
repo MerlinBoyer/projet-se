@@ -1,4 +1,3 @@
-
 #include <avr/io.h>
 #include <stdio.h>
 #include <avr/interrupt.h>
@@ -6,23 +5,46 @@
 #include "time.h"
 #include "led.h"
 #include "bluetooth.h"
-#include "hello.h"
 #include "clockwise.h"
 #include "monitor.h"
 #include "draw.h"
+#include "hello.h"
+
+
+struct Time t = {22,15,0};                            // used to set time during init
+static enum Mode{CLOCKWISE, BASIC, IMPROVED} mode;    // display modes
+
+
+//////////////     Usefull functions          ////////////
+/*
+*   check if char carac is a number ('0' to '9')
+*/
+int verif_are_number(unsigned char chiffre1, unsigned char chiffre2 ,unsigned char chiffre3 , unsigned char chiffre4){
+  if(chiffre1<48 || chiffre1>57){
+    return 0;
+  }
+  if(chiffre2<48 || chiffre2>57){
+    return 0;
+  }
+  if(chiffre3<48 || chiffre3>57){
+    return 0;
+  }
+  if(chiffre4<48 || chiffre4>57){
+    return 0;
+  }
+  return 1;
+}
+
+/*
+*   compute integer from 2 char
+*/
+int digit_to_number(unsigned char chiffre_dizaine,unsigned char chiffre_unite){
+    return 10*((int)chiffre_dizaine - 48)+((int)chiffre_unite - 48);
+}
+
 
 
 //////////////     Initialisation          ////////////
-
-struct Time t = {02,30,0};
-char t_str[99];
-
-static enum Mode{CLOCKWISE, BASIC, IMPROVED} mode;
-int load_hour=0;
-int are_number=1;
-char new_time[4];
-int compteur_hour=0;
-
 /*
 *  call all initialisation functions required
 */
@@ -50,34 +72,15 @@ void global_init()
 
 
 
-int verif_are_number(unsigned char chiffre1, unsigned char chiffre2 ,unsigned char chiffre3 , unsigned char chiffre4){
-  if(chiffre1<48 || chiffre1>57){
-    return 0;
-  }
-  if(chiffre2<48 || chiffre2>57){
-    return 0;
-  }
-  if(chiffre3<48 || chiffre3>57){
-    return 0;
-  }
-  if(chiffre4<48 || chiffre4>57){
-    return 0;
-  }
-  return 1;
-}
 
-int digit_to_number(unsigned char chiffre_dizaine,unsigned char chiffre_unite){
-    return 10*((int)chiffre_dizaine - 48)+((int)chiffre_unite - 48);
-}
-
-///// checking functions  ///////
+///// checking function  ///////
 /*
-*  Check if data have been saved into ble buffer
-*  then update current index and send data to ble
+*  Check if new data have been saved into ble buffer
+*  then process data
 */
 void check_ble()
 {
-  // first check if data have been received
+  // first check if new data have been received
   if ( USART_buffer[0] == '\0' ){
     return;
   }
@@ -86,7 +89,7 @@ void check_ble()
   ble_send_str( USART_buffer );
   ble_send_char( '\n' );
 
-  if ( USART_buffer[0] == 'm'){
+  if ( USART_buffer[0] == 'm'){       // code type "set mode"
     if ( USART_buffer[1] == '1') {
       ble_send_str( "set to Mode 1 \n" );
       mode = CLOCKWISE;
@@ -101,37 +104,36 @@ void check_ble()
     }
   }
 
-  if(USART_buffer[0] == 'h'){
-    // ble_send_str( "Heure " );
+  if(USART_buffer[0] == 'h'){        // code type "set time"
     int i = 1;
-    for(i=1;i<5;i++){
+    for(i=1;i<5;i++){                // check if received code is long enough ('h' + 4digits, ex: h1212)
       if(USART_buffer[i] == '\0'){
+        ble_reset_buff();            // delete buff
         return;
       }
     }
+
     unsigned char chiffre1=USART_buffer[1];
     unsigned char chiffre2=USART_buffer[2];
     unsigned char chiffre3=USART_buffer[3];
     unsigned char chiffre4=USART_buffer[4];
     if ( !verif_are_number( chiffre1, chiffre2 , chiffre3 , chiffre4 ) ){
+      ble_reset_buff();     // delete buff
       return;
     }
 
     int hours=digit_to_number(chiffre1,chiffre2);
-    // ble_send_str( "hours:" );
-    // ble_send_int( hours );
     int minutes=digit_to_number(chiffre3,chiffre4);
-    // ble_send_str( "minutes:" );
-    // ble_send_int( minutes );
-    struct Time newtime = get_time();
-    newtime.minutes = minutes > 59 ? newtime.minutes : minutes;
-    newtime.hours = hours > 23 ? newtime.hours : hours;
+    struct Time newtime = get_time();       // newtime = current time
+    newtime.minutes = minutes > 59 ? newtime.minutes : minutes;     // set new minutes if relevant
+    newtime.hours = hours > 23 ? newtime.hours : hours;             // set new hours if relevant
     set_time( newtime );
     ble_send_str( "time set\n" );
   }
 
+    // debug code: send current time to ble
   if ( USART_buffer[0] == 't'){
-    char timestr[20] = "coucou";
+    char timestr[20] = "";
     get_time_str(timestr);
     ble_send_str( "time : " );
     ble_send_str( timestr );
@@ -148,12 +150,12 @@ void check_ble()
 
 /////            Main              ////////
 void main(){
-  mode = IMPROVED;   // set mode to print clockwises or numbers
-  global_init();      // call all initialisations
+  mode = CLOCKWISE;    // set mode to print clockwises or numbers
+  global_init();       // call all initialisations
   _delay_ms(1);
-  char str[99];
+  char str[99];        // str store current time, needed for improved mode
   while (1){
-    check_ble();
+    check_ble();       // check if new data have been received by ble
     if (mode == CLOCKWISE){
       draw_clockwise();
     } else if ( mode == BASIC){
