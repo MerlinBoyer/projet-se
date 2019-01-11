@@ -19,24 +19,28 @@ ISR (TIMER1_OVF_vect){
   if (m_time.hours >= 24){
     m_time.hours = 0;
   }
-  TCNT1 = MAX_CNT - 12695;   // for 1 sec at 13 MHz
+  TCNT1 = MAX_CNT - 12695;             // set timer value below MAX_CNT threshold: 1 sec at 13 MHz equal 12695 timer ticks
 }
+
 
 void init_time(struct Time t){
   m_time = t;
-  TCCR1A = 0x00;
-  TCNT1 = MAX_CNT - 12695;   // for 1 sec at 13 MHz
-  TCCR1B = (1 << CS10) | (1 << CS12);  // Timer mode with 1024 prescler
-  TIMSK = (1 << TOIE1) ;   // Enable timer1 overflow interrupt(TOIE1)
+  TCCR1A = 0x00;                       // set prescaler part A to 0
+  TCNT1 = MAX_CNT - 12695;             // set timer value below MAX_CNT threshold: 1 sec at 13 MHz equal 12695 timer ticks
+  TCCR1B = (1 << CS10) | (1 << CS12);  // Timer mode with 1024 prescaler
+  TIMSK = (1 << TOIE1) ;               // Enable timer1 overflow interrupt(TOIE1)
 }
+
 
 void set_time(struct Time t){
   m_time = t;
 }
 
+
 struct Time get_time(){
   return m_time;
 }
+
 
 void get_time_str(char * out){
   struct Time t = get_time();

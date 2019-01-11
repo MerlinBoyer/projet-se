@@ -15,10 +15,14 @@
 int first_display = 1;
 int last_angle = 0;
 
+  // cadrans store 4 numbers corresponding to time to display
 static char (*cadrans[4])[2] = {(char (*)[2])un, (char (*)[2])un, (char (*)[2])trois, (char (*)[2])trois};
+
+  // figures store every rectified numbers
 static char (*figures[10])[2] = {(char (*)[2])zero, (char (*)[2])un, (char (*)[2])deux, (char (*)[2])trois,
 (char (*)[2])quatre, (char (*)[2])cinq, (char (*)[2])six, (char (*)[2])sept, (char (*)[2])huit, (char (*)[2])neuf};
 
+  // change data stored in cadrans according to current time
 void update(char * t){
   cadrans[3] = figures[t[4]-'0'];
   if (t[4] == '0' || first_display){
@@ -34,14 +38,16 @@ void update(char * t){
 void set_led_val(){
   int alpha = get_current_angle();
 
-  char leds_seconds = 0x00;
+  char leds_seconds = 0x00;         // used to display second as a circle around clock (last led)
   if ( (alpha + 180)%360 <= 6 * get_time().seconds ){
     leds_seconds |= 0x80;
   }
+
   alpha = 270-alpha;
   while (alpha < 0)
     alpha = 360 + alpha;
-  char v =   cadrans[alpha/90][alpha/DIVISOR][0] & ~(1 << 7);
+
+  char v =   cadrans[alpha/90][alpha/DIVISOR][0] & ~(1 << 7);      // set top leds and shutdown last led (reserved for seconds display)
   set_leds(v | leds_seconds, cadrans[alpha/90][alpha/DIVISOR][1]);
 }
 

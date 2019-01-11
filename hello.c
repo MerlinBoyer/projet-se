@@ -28,14 +28,8 @@ void set_sec(int sec)
 
 void set_min(int min)
 {
-  ble_send_str(" m ");
-  ble_send_int(min);
   int min_1 = min%10;
   int min_10 = min/10;
-  ble_send_str(" min 1 ");
-  ble_send_int(min_1);
-  ble_send_str(" min 10 ");
-  ble_send_int(min_10);
   for (int i = 10; i < 14; i++)
   {
     hour[i][0] = numbers[min_1][i-10][0];
@@ -49,8 +43,6 @@ void set_min(int min)
 
 void set_h(int h)
 {
-  ble_send_str("h ");
-  ble_send_int(h);
   int h_1 = h%10;
   int h_10 = h/10;
   for (int i = 20; i < 24; i++)
